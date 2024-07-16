@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.jdbc.Work;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class MuscleGroup {
     private String muscleGroupName;
 
     @NotNull
+    @Column(length = 1000)
     private String muscleGroupDescription;
 
 
@@ -30,6 +32,15 @@ public class MuscleGroup {
     )
     private List<Workout> musclegroupWorkouts = new ArrayList<>();
 
+
+    public MuscleGroup(String muscleGroupName, String muscleGroupDescription) {
+        this.muscleGroupName = muscleGroupName;
+        this.muscleGroupDescription = muscleGroupDescription;
+    }
+
+    protected MuscleGroup() {
+
+    }
 
     public Long getId() {
         return id;
@@ -45,5 +56,30 @@ public class MuscleGroup {
 
     public List<Workout> getMusclegroupWorkouts() {
         return musclegroupWorkouts;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setMuscleGroupName(String muscleGroupName) {
+        this.muscleGroupName = muscleGroupName;
+    }
+
+    public void setMuscleGroupDescription(String muscleGroupDescription) {
+        this.muscleGroupDescription = muscleGroupDescription;
+    }
+
+    public void addWorkout(Workout workout) {
+        this.musclegroupWorkouts.add(workout);
+    }
+
+    @Override
+    public String toString() {
+        return "MuscleGroup{" +
+                "id=" + id +
+                ", muscleGroupName='" + muscleGroupName + '\'' +
+                ", muscleGroupDescription='" + muscleGroupDescription + '\'' +
+                '}';
     }
 }

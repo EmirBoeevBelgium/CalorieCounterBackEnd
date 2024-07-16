@@ -15,11 +15,21 @@ public class Workout {
     private String workoutName;
 
     @NotNull
-    private Float burnedCaloriesPHour;
+    private double burnedCaloriesPHour;
 
     @NotNull
-    private Float burnedCaloriesPMinute;
+    private double burnedCaloriesPMinute;
 
+
+    public Workout(String workoutName, double burnedCaloriesPHour, double burnedCaloriesPMinute) {
+        this.workoutName = workoutName;
+        this.burnedCaloriesPHour = burnedCaloriesPHour;
+        this.burnedCaloriesPMinute = burnedCaloriesPMinute;
+    }
+
+    protected Workout() {
+
+    }
 
     public Long getId() {
         return id;
@@ -29,11 +39,13 @@ public class Workout {
         return workoutName;
     }
 
-    public Float getBurnedCaloriesPHour() {
+    public double getBurnedCaloriesPHour() {
         return burnedCaloriesPHour;
     }
 
-    public Float getBurnedCaloriesPMinute() {
+    public double getBurnedCaloriesPMinute() {
         return burnedCaloriesPMinute;
     }
+
+
 }
