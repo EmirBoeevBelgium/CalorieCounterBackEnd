@@ -34,6 +34,6 @@ public class Recipe {
     }
 
     public Float getCalories() {
-        return calories;
+        return totalCalories;
     }
 }

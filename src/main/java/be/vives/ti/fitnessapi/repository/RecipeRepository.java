@@ -1,0 +1,14 @@
+package be.vives.ti.fitnessapi.repository;
+
+import be.vives.ti.fitnessapi.domain.Recipe;
+import be.vives.ti.fitnessapi.domain.Workout;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface RecipeRepository extends JpaRepository<Recipe, Long> {
+    Optional<Recipe> findByRecipeNameIgnoreCase(String recipeName);
+    List<Recipe> findByTotalCalories(Float totalCalories);
+    void deleteRecipeByRecipeName(String recipeName);
+}
