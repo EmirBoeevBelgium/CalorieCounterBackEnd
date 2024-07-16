@@ -3,6 +3,9 @@ package be.vives.ti.fitnessapi.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "WORKOUT")
 public class Workout {
@@ -20,6 +23,8 @@ public class Workout {
     @NotNull
     private double burnedCaloriesPMinute;
 
+    @ManyToMany(mappedBy = "musclegroupWorkouts")
+    private List<MuscleGroup> muscleGroups = new ArrayList<>();
 
     public Workout(String workoutName, double burnedCaloriesPHour, double burnedCaloriesPMinute) {
         this.workoutName = workoutName;
@@ -47,5 +52,24 @@ public class Workout {
         return burnedCaloriesPMinute;
     }
 
+    public List<MuscleGroup> getMuscleGroups() {
+        return muscleGroups;
+    }
 
+    public void setWorkoutName(String workoutName) {
+        this.workoutName = workoutName;
+    }
+
+    public void setBurnedCaloriesPHour(double burnedCaloriesPHour) {
+        this.burnedCaloriesPHour = burnedCaloriesPHour;
+    }
+
+    public void setBurnedCaloriesPMinute(double burnedCaloriesPMinute) {
+        this.burnedCaloriesPMinute = burnedCaloriesPMinute;
+    }
+
+
+    public void addMuscleGroup(MuscleGroup muscleGroup) {
+        this.muscleGroups.add(muscleGroup);
+    }
 }

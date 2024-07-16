@@ -9,6 +9,8 @@ import org.hibernate.jdbc.Work;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class CommandLineRunnerAtStartup implements CommandLineRunner {
 
@@ -77,8 +79,24 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         Workout barbellRows = new Workout("Standing barbell rows", 213, 4.3);
         Workout benchPress = new Workout("Barbell bench press", 459, 7.7);
         Workout jogging = new Workout("Jogging", 603, 10.1);
-        Workout cylcing = new Workout("Cycling", 450, 7.5);
+        Workout cycling = new Workout("Cycling", 450, 7.5);
         Workout abdominalCrunches = new Workout("Abdominal crunches", 396, 6.6);
+
+
+
+
+        workoutRepository.save(barbellPress);
+        workoutRepository.save(seatedOverheadPress);
+        workoutRepository.save(machineLateralRaises);
+        workoutRepository.save(rowing);
+        workoutRepository.save(alternateDumbellCurls);
+        workoutRepository.save(olympicBarbellLift);
+        workoutRepository.save(barbellRows);
+        workoutRepository.save(benchPress);
+        workoutRepository.save(jogging);
+        workoutRepository.save(cycling);
+        workoutRepository.save(abdominalCrunches);
+
 
         deltoids.addWorkout(barbellPress);
         deltoids.addWorkout(seatedOverheadPress);
@@ -105,11 +123,15 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         trapezius.addWorkout(barbellRows);
         quadriceps.addWorkout(rowing);
         quadriceps.addWorkout(olympicBarbellLift);
-        quadriceps.addWorkout(cylcing);
-        hamstrings.addWorkout(cylcing);
+        quadriceps.addWorkout(cycling);
+        hamstrings.addWorkout(cycling);
+
+        calves.addWorkout(jogging);
+        calves.addWorkout(cycling);
+
         heart.addWorkout(jogging);
         heart.addWorkout(rowing);
-        heart.addWorkout(cylcing);
+        heart.addWorkout(cycling);
 
         muscleGroupRepository.save(deltoids);
         muscleGroupRepository.save(biceps);

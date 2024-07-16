@@ -18,7 +18,7 @@ public class Recipe {
     private String recipeInstruction;
 
     @NotNull
-    private Float totalCalories;
+    private double totalCalories;
 
 
     public Long getId() {
@@ -33,7 +33,7 @@ public class Recipe {
         return recipeInstruction;
     }
 
-    public Float getCalories() {
+    public double getCalories() {
         return totalCalories;
     }
 }
