@@ -1,6 +1,7 @@
 package be.vives.ti.fitnessapi;
 
 import be.vives.ti.fitnessapi.domain.MuscleGroup;
+import be.vives.ti.fitnessapi.domain.Recipe;
 import be.vives.ti.fitnessapi.domain.Workout;
 import be.vives.ti.fitnessapi.repository.MuscleGroupRepository;
 import be.vives.ti.fitnessapi.repository.RecipeRepository;
@@ -83,7 +84,7 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         Workout abdominalCrunches = new Workout("Abdominal crunches", 396, 6.6);
 
 
-
+        Recipe roastChickenThighs = new Recipe();
 
         workoutRepository.save(barbellPress);
         workoutRepository.save(seatedOverheadPress);

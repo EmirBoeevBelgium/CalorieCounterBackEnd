@@ -15,6 +15,7 @@ public class Recipe {
     private String recipeName;
 
     @NotNull
+    @Column(length = 5000)
     private String recipeInstruction;
 
     @NotNull
@@ -35,5 +36,31 @@ public class Recipe {
 
     public double getCalories() {
         return totalCalories;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setRecipeName(String recipeName) {
+        this.recipeName = recipeName;
+    }
+
+    public void setRecipeInstruction(String recipeInstruction) {
+        this.recipeInstruction = recipeInstruction;
+    }
+
+    public void setTotalCalories(double totalCalories) {
+        this.totalCalories = totalCalories;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", recipeName='" + recipeName + '\'' +
+                ", recipeInstruction='" + recipeInstruction + '\'' +
+                ", totalCalories=" + totalCalories +
+                '}';
     }
 }

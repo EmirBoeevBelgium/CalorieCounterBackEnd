@@ -56,6 +56,10 @@ public class Workout {
         return muscleGroups;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setWorkoutName(String workoutName) {
         this.workoutName = workoutName;
     }
@@ -71,5 +75,15 @@ public class Workout {
 
     public void addMuscleGroup(MuscleGroup muscleGroup) {
         this.muscleGroups.add(muscleGroup);
+    }
+
+    @Override
+    public String toString() {
+        return "Workout{" +
+                "id=" + id +
+                ", workoutName='" + workoutName + '\'' +
+                ", burnedCaloriesPHour=" + burnedCaloriesPHour +
+                ", burnedCaloriesPMinute=" + burnedCaloriesPMinute +
+                '}';
     }
 }

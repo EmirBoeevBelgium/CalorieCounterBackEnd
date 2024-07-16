@@ -2,12 +2,9 @@ package be.vives.ti.fitnessapi.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.jdbc.Work;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "MUSCLEGROUP")
@@ -54,7 +51,7 @@ public class MuscleGroup {
         return muscleGroupDescription;
     }
 
-    public List<Workout> getMusclegroupWorkouts() {
+    public List<Workout> getMuscleGroupWorkouts() {
         return musclegroupWorkouts;
     }
 
