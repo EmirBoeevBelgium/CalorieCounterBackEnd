@@ -29,4 +29,21 @@ public class MuscleGroup {
             inverseJoinColumns = @JoinColumn(name = "workout_id")
     )
     private List<Workout> musclegroupWorkouts = new ArrayList<>();
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getMuscleGroupName() {
+        return muscleGroupName;
+    }
+
+    public String getMuscleGroupDescription() {
+        return muscleGroupDescription;
+    }
+
+    public List<Workout> getMusclegroupWorkouts() {
+        return musclegroupWorkouts;
+    }
 }
