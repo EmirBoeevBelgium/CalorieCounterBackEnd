@@ -5,6 +5,7 @@ import be.vives.ti.fitnessapi.domain.Workout;
 import be.vives.ti.fitnessapi.repository.MuscleGroupRepository;
 import be.vives.ti.fitnessapi.repository.RecipeRepository;
 import be.vives.ti.fitnessapi.repository.WorkoutRepository;
+import org.hibernate.jdbc.Work;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -70,15 +71,45 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         Workout barbellPress = new Workout("Barbell press", 216, 4);
         Workout seatedOverheadPress = new Workout("Seated overhead press", 216, 4);
         Workout machineLateralRaises = new Workout("Machine lateral raises", 272, 4.5);
-
         Workout rowing = new Workout("Rowing", 840, 14);
         Workout alternateDumbellCurls = new Workout("Alternate dumbell curls", 323, 5.4);
+        Workout olympicBarbellLift = new Workout("Olympic barbell lift", 643, 11);
+        Workout barbellRows = new Workout("Standing barbell rows", 213, 4.3);
+        Workout benchPress = new Workout("Barbell bench press", 459, 7.7);
+        Workout jogging = new Workout("Jogging", 603, 10.1);
+        Workout cylcing = new Workout("Cycling", 450, 7.5);
+        Workout abdominalCrunches = new Workout("Abdominal crunches", 396, 6.6);
 
         deltoids.addWorkout(barbellPress);
         deltoids.addWorkout(seatedOverheadPress);
         deltoids.addWorkout(machineLateralRaises);
+        deltoids.addWorkout(benchPress);
 
+        triceps.addWorkout(barbellPress);
+        triceps.addWorkout(seatedOverheadPress);
+        triceps.addWorkout(machineLateralRaises);
+        triceps.addWorkout(benchPress);
 
+        biceps.addWorkout(rowing);
+        biceps.addWorkout(alternateDumbellCurls);
+        biceps.addWorkout(barbellRows);
+
+        wristFlexors.addWorkout(rowing);
+        wristFlexors.addWorkout(alternateDumbellCurls);
+        wristFlexors.addWorkout(barbellRows);
+        wristFlexors.addWorkout(barbellPress);
+        wristFlexors.addWorkout(benchPress);
+
+        lats.addWorkout(rowing);
+        abdominals.addWorkout(abdominalCrunches);
+        trapezius.addWorkout(barbellRows);
+        quadriceps.addWorkout(rowing);
+        quadriceps.addWorkout(olympicBarbellLift);
+        quadriceps.addWorkout(cylcing);
+        hamstrings.addWorkout(cylcing);
+        heart.addWorkout(jogging);
+        heart.addWorkout(rowing);
+        heart.addWorkout(cylcing);
 
         muscleGroupRepository.save(deltoids);
         muscleGroupRepository.save(biceps);
