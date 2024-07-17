@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
-    Optional<Recipe> findByRecipeNameIgnoreCase(String recipeName);
-    List<Recipe> findByTotalCalories(Float totalCalories);
+    Optional<Recipe> findByRecipeNameContainingIgnoreCase(String recipeName);
+    List<Recipe> findByTotalKiloCaloriesBetween(double startCalories, double endCalories);
     void deleteRecipeByRecipeName(String recipeName);
 }

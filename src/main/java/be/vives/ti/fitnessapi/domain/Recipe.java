@@ -3,6 +3,8 @@ package be.vives.ti.fitnessapi.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 @Entity
 @Table(name = "RECIPE")
 public class Recipe {
@@ -15,12 +17,30 @@ public class Recipe {
     private String recipeName;
 
     @NotNull
-    @Column(length = 5000)
-    private String recipeInstruction;
+    @ElementCollection
+    @CollectionTable(name = "RECIPE_INSTRUCTIONS", joinColumns = @JoinColumn( name = "recipe_id"))
+    private List<RecipeInstruction> recipeInstructions;
 
     @NotNull
-    private double totalCalories;
+    @ElementCollection
+    @CollectionTable(name = "RECIPE_INGREDIENTS", joinColumns = @JoinColumn( name = "recipe_id"))
+    private List<RecipeIngredient> recipeIngredients;
 
+    @NotNull
+    private double totalKiloCalories;
+
+
+    public Recipe(String recipeName, List<RecipeInstruction> recipeInstructions, List<RecipeIngredient> recipeIngredients, double totalCalories) {
+
+        this.recipeName = recipeName;
+        this.recipeInstructions = recipeInstructions;
+        this.recipeIngredients = recipeIngredients;
+        this.totalKiloCalories = totalCalories;
+    }
+
+    protected Recipe() {
+
+    }
 
     public Long getId() {
         return id;
@@ -30,12 +50,16 @@ public class Recipe {
         return recipeName;
     }
 
-    public String getRecipeInstruction() {
-        return recipeInstruction;
+    public List<RecipeInstruction> getRecipeInstructions() {
+        return recipeInstructions;
+    }
+
+    public List<RecipeIngredient> getRecipeIngredients() {
+        return recipeIngredients;
     }
 
     public double getCalories() {
-        return totalCalories;
+        return totalKiloCalories;
     }
 
     public void setId(Long id) {
@@ -46,12 +70,16 @@ public class Recipe {
         this.recipeName = recipeName;
     }
 
-    public void setRecipeInstruction(String recipeInstruction) {
-        this.recipeInstruction = recipeInstruction;
+    public void setRecipeInstruction(List<RecipeInstruction> recipeInstructions) {
+        this.recipeInstructions = recipeInstructions;
+    }
+
+    public void setRecipeIngredients(List<RecipeIngredient> recipeIngredients) {
+        this.recipeIngredients = recipeIngredients;
     }
 
     public void setTotalCalories(double totalCalories) {
-        this.totalCalories = totalCalories;
+        this.totalKiloCalories = totalCalories;
     }
 
     @Override
@@ -59,8 +87,8 @@ public class Recipe {
         return "Recipe{" +
                 "id=" + id +
                 ", recipeName='" + recipeName + '\'' +
-                ", recipeInstruction='" + recipeInstruction + '\'' +
-                ", totalCalories=" + totalCalories +
+                ", recipeInstruction='" + recipeInstructions + '\'' +
+                ", totalCalories=" + totalKiloCalories +
                 '}';
     }
 }

@@ -3,6 +3,7 @@ package be.vives.ti.fitnessapi.service;
 import be.vives.ti.fitnessapi.domain.MuscleGroup;
 import be.vives.ti.fitnessapi.repository.MuscleGroupRepository;
 import be.vives.ti.fitnessapi.response.MuscleGroupResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +22,11 @@ public class MuscleGroupService {
 
     public List<MuscleGroupResponse> findAll() {
         List<MuscleGroup> muscleGroups = muscleGroupRepository.findAll();
-        List<MuscleGroupResponse> muscleGroupResponses = muscleGroups.stream().map(MuscleGroupResponse::new).collect(Collectors.toList());
-        return muscleGroupResponses;
+        return muscleGroups.stream().map(MuscleGroupResponse::new).collect(Collectors.toList());
     }
 
     public ResponseEntity<MuscleGroupResponse> findByMuscleGroupName(String muscleGroupName) {
-        Optional<MuscleGroup> muscleGroup = muscleGroupRepository.findByMuscleGroupNameIgnoreCase(muscleGroupName);
+        Optional<MuscleGroup> muscleGroup = muscleGroupRepository.findByMuscleGroupNameContainingIgnoreCase(muscleGroupName);
 
         if(muscleGroup.isPresent()) {
             MuscleGroupResponse response = new MuscleGroupResponse(muscleGroup.get());

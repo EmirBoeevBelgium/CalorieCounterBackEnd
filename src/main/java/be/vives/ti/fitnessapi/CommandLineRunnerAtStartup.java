@@ -1,8 +1,6 @@
 package be.vives.ti.fitnessapi;
 
-import be.vives.ti.fitnessapi.domain.MuscleGroup;
-import be.vives.ti.fitnessapi.domain.Recipe;
-import be.vives.ti.fitnessapi.domain.Workout;
+import be.vives.ti.fitnessapi.domain.*;
 import be.vives.ti.fitnessapi.repository.MuscleGroupRepository;
 import be.vives.ti.fitnessapi.repository.RecipeRepository;
 import be.vives.ti.fitnessapi.repository.WorkoutRepository;
@@ -10,6 +8,8 @@ import org.hibernate.jdbc.Work;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -84,7 +84,39 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         Workout abdominalCrunches = new Workout("Abdominal crunches", 396, 6.6);
 
 
-        Recipe roastChickenThighs = new Recipe();
+        RecipeIngredient chickenThighs = new RecipeIngredient("skinless boneless chicken thighs, cut in half", "3 pieces");
+        RecipeIngredient rapeseedOil = new RecipeIngredient("rapeseed oil", "2 tbsp");
+        RecipeIngredient garlicCloves = new RecipeIngredient("garlic cloves, bashed", "2 pieces");
+        RecipeIngredient coriander = new RecipeIngredient("small pack coriander", "½");
+        RecipeIngredient parsley = new RecipeIngredient("small pack parsley", "½");
+        RecipeIngredient anchovy = new RecipeIngredient("anchovy fillet", "½");
+        RecipeIngredient capers = new RecipeIngredient("capers", "1 piece");
+        RecipeIngredient rice = new RecipeIngredient("pouch cooked wholegrain rice", "200g");
+        RecipeIngredient spinach = new RecipeIngredient("baby leaf spinach", "200g");
+
+        List<RecipeIngredient> roastChickenIngredients = new ArrayList<>();
+        roastChickenIngredients.add(chickenThighs);
+        roastChickenIngredients.add(rapeseedOil);
+        roastChickenIngredients.add(garlicCloves);
+        roastChickenIngredients.add(coriander);
+        roastChickenIngredients.add(parsley);
+        roastChickenIngredients.add(anchovy);
+        roastChickenIngredients.add(capers);
+        roastChickenIngredients.add(rice);
+        roastChickenIngredients.add(spinach);
+
+        RecipeInstruction roastChickenStep1 = new RecipeInstruction("Heat oven to 200C/180C fan/gas 6. Season the chicken, rub with ½ tbsp oil, then put in a large roasting tin with the garlic and roast for 25-30 mins.",1);
+        RecipeInstruction roastChickenStep2 = new RecipeInstruction("Meanwhile, blitz the herbs, anchovy, capers, lemon juice and remaining oil with some seasoning in a food processor until finely chopped. Set aside.",2);
+        RecipeInstruction roastChickenStep3 = new RecipeInstruction("Once the chicken is cooked, remove the tin from the oven and squeeze the garlic out of their skins. Tip in the rice and use a wooden spoon to break it up, then add the spinach and lemon zest and toss. Return to the oven for 5 mins. Divide between bowls and dollop on the salsa verde.",3);
+
+        List<RecipeInstruction> roastChickenInstructions = new ArrayList<>();
+        roastChickenInstructions.add(roastChickenStep1);
+        roastChickenInstructions.add(roastChickenStep2);
+        roastChickenInstructions.add(roastChickenStep3);
+
+        Recipe roastChickenThighs = new Recipe("Roast chicken thighs with brown rice & salsa verde", roastChickenInstructions, roastChickenIngredients, 423);
+
+        recipeRepository.save(roastChickenThighs);
 
         workoutRepository.save(barbellPress);
         workoutRepository.save(seatedOverheadPress);
