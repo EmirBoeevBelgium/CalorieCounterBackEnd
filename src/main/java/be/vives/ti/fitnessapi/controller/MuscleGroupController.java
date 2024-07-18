@@ -3,16 +3,13 @@ package be.vives.ti.fitnessapi.controller;
 import be.vives.ti.fitnessapi.response.MuscleGroupResponse;
 import be.vives.ti.fitnessapi.service.MuscleGroupService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping( value = "/musclegroups", produces = "application/json")
+@RequestMapping( value = "musclegroups", produces = "application/json")
 public class MuscleGroupController {
 
     private MuscleGroupService muscleGroupService;
@@ -27,8 +24,8 @@ public class MuscleGroupController {
         return muscleGroupService.findAll();
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<MuscleGroupResponse> findByMuscleGroupName(@PathVariable("name") String muscleGroupName) {
+    @GetMapping("musclegroup")
+    public ResponseEntity<MuscleGroupResponse> findByMuscleGroupName(@RequestParam("name") String muscleGroupName) {
         return muscleGroupService.findByMuscleGroupName(muscleGroupName);
     }
 }

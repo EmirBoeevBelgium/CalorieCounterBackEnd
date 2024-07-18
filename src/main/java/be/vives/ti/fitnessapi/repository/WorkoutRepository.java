@@ -9,11 +9,13 @@ import java.util.Optional;
 public interface WorkoutRepository extends JpaRepository<Workout, Long> {
 
     Optional<Workout> findByWorkoutNameIgnoreCase(String workoutName);
-    List<Workout> findByBurnedCaloriesPHour(Float burnedCaloriesPHour);
+    List<Workout> findByBurnedCaloriesPHourLessThanEqual(double burnedCaloriesPHour);
+    List<Workout> findByBurnedCaloriesPHourGreaterThanEqual(double burnedCaloriesPHour);
 
-    List<Workout> findByBurnedCaloriesPMinute(Float burnedCaloriesPMinute);
+    List<Workout> findByBurnedCaloriesPMinuteLessThanEqual(double burnedCaloriesPMinute);
+    List<Workout> findByBurnedCaloriesPMinuteGreaterThanEqual(double burnedCaloriesPMinute);
 
-    void deleteWorkoutByWorkoutNameIgnoreCase(String workoutName);
+    void deleteWorkoutById(Long id);
 
 
 }

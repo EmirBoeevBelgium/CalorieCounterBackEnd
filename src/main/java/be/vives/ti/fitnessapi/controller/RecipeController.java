@@ -1,14 +1,16 @@
 package be.vives.ti.fitnessapi.controller;
 
+import be.vives.ti.fitnessapi.domain.Recipe;
 import be.vives.ti.fitnessapi.response.RecipeResponse;
 import be.vives.ti.fitnessapi.service.RecipeService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping( value = "/recipes", produces = "application/json")
+@RequestMapping( value = "recipes", produces = "application/json")
 public class RecipeController {
     private RecipeService recipeService;
 
@@ -21,8 +23,8 @@ public class RecipeController {
         return recipeService.findAll();
     }
 
-    @GetMapping("name/{name}")
-    public ResponseEntity<RecipeResponse> findByRecipeName(@PathVariable("name") String recipeName) {
+    @GetMapping("recipe")
+    public ResponseEntity<RecipeResponse> findByRecipeName(@RequestParam("name") String recipeName) {
         return recipeService.findByRecipeName(recipeName);
     }
 
@@ -32,4 +34,21 @@ public class RecipeController {
             @RequestParam("endcalories") double endCalories) {
         return recipeService.findByCaloriesBetween(startCalories, endCalories);
     }
+
+    @DeleteMapping("recipe")
+    public ResponseEntity<Void> deleteById(@RequestParam("id") Long id) {
+        return recipeService.deleteById(id);
+    }
+
+    //Moet nog functie voorzien dat kijkt of recept al bestaat.
+    @PostMapping
+    public RecipeResponse saveRecipe(@Valid @RequestBody Recipe recipe) {
+        return recipeService.saveRecipe(recipe);
+    }
+
+    @PutMapping("recipe")
+    public ResponseEntity<String> updateRecipe(@RequestParam("id") Long id, @Valid @RequestBody Recipe updatedRecipe) {
+        return recipeService.updateRecipe(id, updatedRecipe);
+    }
+
 }

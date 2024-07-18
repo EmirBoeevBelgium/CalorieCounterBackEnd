@@ -18,7 +18,7 @@ public class RecipeResponse {
     public RecipeResponse(Recipe recipe) {
         this.id = recipe.getId();
         this.recipeName = recipe.getRecipeName();
-        this.totalKiloCalories = recipe.getCalories();
+        this.totalKiloCalories = recipe.getTotalKiloCalories();
         this.recipeInstructions = recipe.getRecipeInstructions().stream().map(RecipeInstructionResponse::new).collect(Collectors.toList());
         this.recipeIngredients = recipe.getRecipeIngredients().stream().map(RecipeIngredientResponse::new).collect(Collectors.toList());
     }

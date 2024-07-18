@@ -58,7 +58,7 @@ public class Recipe {
         return recipeIngredients;
     }
 
-    public double getCalories() {
+    public double getTotalKiloCalories() {
         return totalKiloCalories;
     }
 
@@ -78,8 +78,8 @@ public class Recipe {
         this.recipeIngredients = recipeIngredients;
     }
 
-    public void setTotalCalories(double totalCalories) {
-        this.totalKiloCalories = totalCalories;
+    public void setTotalKiloCalories(double totalKiloCalories) {
+        this.totalKiloCalories = totalKiloCalories;
     }
 
     @Override
