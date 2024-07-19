@@ -1,27 +1,21 @@
 package be.vives.ti.fitnessapi.response;
 
-import be.vives.ti.fitnessapi.domain.MuscleGroup;
 import be.vives.ti.fitnessapi.domain.Workout;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
-public class WorkoutResponse {
+public class MuscleGroupWorkoutResponse {
     private Long id;
 
     private String workoutName;
 
     private double burnedKiloCaloriesPHour;
 
-    private List<WorkoutMuscleGroupResponse> muscleGroups;
-
-    public WorkoutResponse(Workout workout) {
+    public MuscleGroupWorkoutResponse(Workout workout) {
         this.id = workout.getId();
         this.workoutName = workout.getWorkoutName();
         this.burnedKiloCaloriesPHour = workout.getBurnedKiloCaloriesPHour();
-        this.muscleGroups = workout.getWorkoutMuscleGroups().stream().map(WorkoutMuscleGroupResponse::new).collect(Collectors.toList());
     }
-
     public Long getId() {
         return id;
     }
@@ -33,9 +27,4 @@ public class WorkoutResponse {
     public double getBurnedKiloCaloriesPHour() {
         return burnedKiloCaloriesPHour;
     }
-
-    public List<WorkoutMuscleGroupResponse> getWorkoutMuscleGroups() {
-        return muscleGroups;
-    }
-
 }

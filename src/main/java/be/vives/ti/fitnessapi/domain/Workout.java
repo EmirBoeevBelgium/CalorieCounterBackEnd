@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "WORKOUT")
@@ -18,18 +19,15 @@ public class Workout {
     private String workoutName;
 
     @NotNull
-    private double burnedCaloriesPHour;
+    private double burnedKiloCaloriesPHour;
 
-    @NotNull
-    private double burnedCaloriesPMinute;
 
     @ManyToMany(mappedBy = "musclegroupWorkouts")
-    private List<MuscleGroup> muscleGroups = new ArrayList<>();
+    private List<MuscleGroup> workoutMuscleGroups = new ArrayList<>();
 
-    public Workout(String workoutName, double burnedCaloriesPHour, double burnedCaloriesPMinute) {
+    public Workout(String workoutName, double burnedKiloCaloriesPHour) {
         this.workoutName = workoutName;
-        this.burnedCaloriesPHour = burnedCaloriesPHour;
-        this.burnedCaloriesPMinute = burnedCaloriesPMinute;
+        this.burnedKiloCaloriesPHour = burnedKiloCaloriesPHour;
     }
 
     protected Workout() {
@@ -44,16 +42,31 @@ public class Workout {
         return workoutName;
     }
 
-    public double getBurnedCaloriesPHour() {
-        return burnedCaloriesPHour;
+    public double getBurnedKiloCaloriesPHour() {
+        return burnedKiloCaloriesPHour;
     }
 
-    public double getBurnedCaloriesPMinute() {
-        return burnedCaloriesPMinute;
+
+    public List<MuscleGroup> getWorkoutMuscleGroups() {
+        return workoutMuscleGroups;
     }
 
-    public List<MuscleGroup> getMuscleGroups() {
-        return muscleGroups;
+
+    public MuscleGroup removeMuscleGroupById(Long id) {
+        MuscleGroup foundMuscleGroup = new MuscleGroup();
+        int i = 0;
+        boolean musclegGroupFound = false;
+        while (i < workoutMuscleGroups.size() && !musclegGroupFound) {
+            if(Objects.equals(workoutMuscleGroups.get(i).getId(), id)) {
+                foundMuscleGroup = workoutMuscleGroups.get(i);
+                workoutMuscleGroups.remove(i);
+                foundMuscleGroup.getMuscleGroupWorkouts().remove(this);
+                musclegGroupFound = true;
+
+            }
+            i++;
+        }
+        return foundMuscleGroup;
     }
 
     public void setId(Long id) {
@@ -64,17 +77,16 @@ public class Workout {
         this.workoutName = workoutName;
     }
 
-    public void setBurnedCaloriesPHour(double burnedCaloriesPHour) {
-        this.burnedCaloriesPHour = burnedCaloriesPHour;
+    public void setBurnedKiloCaloriesPHour(double burnedKiloCaloriesPHour) {
+        this.burnedKiloCaloriesPHour = burnedKiloCaloriesPHour;
     }
 
-    public void setBurnedCaloriesPMinute(double burnedCaloriesPMinute) {
-        this.burnedCaloriesPMinute = burnedCaloriesPMinute;
+    public void setMuscleGroups(List<MuscleGroup> muscleGroups) {
+        this.workoutMuscleGroups = muscleGroups;
     }
-
 
     public void addMuscleGroup(MuscleGroup muscleGroup) {
-        this.muscleGroups.add(muscleGroup);
+        this.workoutMuscleGroups.add(muscleGroup);
     }
 
     @Override
@@ -82,8 +94,7 @@ public class Workout {
         return "Workout{" +
                 "id=" + id +
                 ", workoutName='" + workoutName + '\'' +
-                ", burnedCaloriesPHour=" + burnedCaloriesPHour +
-                ", burnedCaloriesPMinute=" + burnedCaloriesPMinute +
+                ", burnedCaloriesPHour=" + burnedKiloCaloriesPHour +
                 '}';
     }
 }

@@ -1,6 +1,7 @@
 package be.vives.ti.fitnessapi.service;
 
 import be.vives.ti.fitnessapi.domain.MuscleGroup;
+import be.vives.ti.fitnessapi.domain.Workout;
 import be.vives.ti.fitnessapi.repository.MuscleGroupRepository;
 import be.vives.ti.fitnessapi.response.MuscleGroupResponse;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,20 @@ public class MuscleGroupService {
             MuscleGroupResponse response = new MuscleGroupResponse(muscleGroup.get());
             return ResponseEntity.ok(response);
         }
+        return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<String> removeWorkout(Long muscleGroupId, Long workoutId) {
+        Optional<MuscleGroup> foundMuscleGroup = muscleGroupRepository.findById(muscleGroupId);
+
+        if(foundMuscleGroup.isPresent()) {
+            MuscleGroup muscleGroup = foundMuscleGroup.get();
+            Workout foundWorkout = muscleGroup.removeWorkoutById(workoutId);
+
+            muscleGroupRepository.save(muscleGroup);
+            return ResponseEntity.ok("Workout '" + foundWorkout.getWorkoutName() + "' succesfully removed from muscle group.");
+        }
+
         return ResponseEntity.notFound().build();
     }
 }

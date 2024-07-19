@@ -27,7 +27,7 @@ public class RecipeService {
     }
 
     public ResponseEntity<RecipeResponse> findByRecipeName(String recipeName) {
-        Optional<Recipe> recipe = recipeRepository.findByRecipeNameContainingIgnoreCase(recipeName);
+        Optional<Recipe> recipe = recipeRepository.findByRecipeNameIgnoreCase(recipeName);
         if(recipe.isPresent()) {
             RecipeResponse response = new RecipeResponse(recipe.get());
             return ResponseEntity.ok(response);

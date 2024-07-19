@@ -71,17 +71,17 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         MuscleGroup heart = new MuscleGroup("Heart", "Cardiac muscle (also called heart muscle or myocardium) is one of three types of vertebrate muscle tissues, with the other two being skeletal muscle and smooth muscle. It is an involuntary, striated muscle that constitutes the main tissue of the wall of the heart. The cardiac muscle (myocardium) forms a thick middle layer between the outer layer of the heart wall (the pericardium) and the inner layer (the endocardium), with blood supplied via the coronary circulation. It is composed of individual cardiac muscle cells joined by intercalated discs, and encased by collagen fibers and other substances that form the extracellular matrix.");
 
 
-        Workout barbellPress = new Workout("Barbell press", 216, 4);
-        Workout seatedOverheadPress = new Workout("Seated overhead press", 216, 4);
-        Workout machineLateralRaises = new Workout("Machine lateral raises", 272, 4.5);
-        Workout rowing = new Workout("Rowing", 840, 14);
-        Workout alternateDumbellCurls = new Workout("Alternate dumbell curls", 323, 5.4);
-        Workout olympicBarbellLift = new Workout("Olympic barbell lift", 643, 11);
-        Workout barbellRows = new Workout("Standing barbell rows", 213, 4.3);
-        Workout benchPress = new Workout("Barbell bench press", 459, 7.7);
-        Workout jogging = new Workout("Jogging", 603, 10.1);
-        Workout cycling = new Workout("Cycling", 450, 7.5);
-        Workout abdominalCrunches = new Workout("Abdominal crunches", 396, 6.6);
+        Workout barbellPress = new Workout("Barbell press", 216);
+        Workout seatedOverheadPress = new Workout("Seated overhead press", 216);
+        Workout machineLateralRaises = new Workout("Machine lateral raises", 272);
+        Workout rowing = new Workout("Rowing", 840);
+        Workout alternateDumbellCurls = new Workout("Alternate dumbell curls", 323);
+        Workout olympicBarbellLift = new Workout("Olympic barbell lift", 643);
+        Workout barbellRows = new Workout("Standing barbell rows", 213);
+        Workout benchPress = new Workout("Barbell bench press", 459);
+        Workout jogging = new Workout("Jogging", 603);
+        Workout cycling = new Workout("Cycling", 450);
+        Workout abdominalCrunches = new Workout("Abdominal crunches", 396);
 
 
         RecipeIngredient chickenThighs = new RecipeIngredient("skinless boneless chicken thighs, cut in half", "3 pieces");

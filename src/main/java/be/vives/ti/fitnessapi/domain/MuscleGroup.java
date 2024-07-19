@@ -2,9 +2,11 @@ package be.vives.ti.fitnessapi.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.jdbc.Work;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "MUSCLEGROUP")
@@ -55,6 +57,22 @@ public class MuscleGroup {
         return musclegroupWorkouts;
     }
 
+    public Workout removeWorkoutById(Long id) {
+        Workout foundWorkout = new Workout();
+        int i = 0;
+        boolean workoutFound = false;
+        while (i < musclegroupWorkouts.size() && !workoutFound) {
+            if(Objects.equals(musclegroupWorkouts.get(i).getId(), id)) {
+                foundWorkout = musclegroupWorkouts.get(i);
+                musclegroupWorkouts.remove(i);
+                foundWorkout.getWorkoutMuscleGroups().remove(this);
+                workoutFound = true;
+
+            }
+            i++;
+        }
+        return foundWorkout;
+    }
     public void setId(Long id) {
         this.id = id;
     }

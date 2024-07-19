@@ -28,4 +28,9 @@ public class MuscleGroupController {
     public ResponseEntity<MuscleGroupResponse> findByMuscleGroupName(@RequestParam("name") String muscleGroupName) {
         return muscleGroupService.findByMuscleGroupName(muscleGroupName);
     }
+
+    @PutMapping("workout")
+    public ResponseEntity<String> removeMuscleGroup(@RequestParam("musclegroupid") Long muscleGroupId, @RequestParam("workoutid") Long workoutId) {
+        return muscleGroupService.removeWorkout(muscleGroupId, workoutId);
+    }
 }
