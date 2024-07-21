@@ -11,6 +11,7 @@ public interface WorkoutRepository extends JpaRepository<Workout, Long> {
     Optional<Workout> findByWorkoutNameIgnoreCase(String workoutName);
     List<Workout> findByBurnedKiloCaloriesPHourBetween(double startBurnedCaloriesPHour, double endBurnedCaloriesPHour);
 
+    boolean existsByWorkoutName(String workoutname);
 
     void deleteWorkoutById(Long id);
 

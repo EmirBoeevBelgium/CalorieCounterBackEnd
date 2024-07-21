@@ -40,9 +40,8 @@ public class RecipeController {
         return recipeService.deleteById(id);
     }
 
-    //Moet nog functie voorzien dat kijkt of recept al bestaat.
     @PostMapping
-    public RecipeResponse saveRecipe(@Valid @RequestBody Recipe recipe) {
+    public ResponseEntity<String> saveRecipe(@Valid @RequestBody Recipe recipe) {
         return recipeService.saveRecipe(recipe);
     }
 

@@ -44,7 +44,7 @@ public class WorkoutController {
 
     //Moet nog functie voorzien dat kijkt of recept al bestaat.
     @PostMapping
-    public WorkoutResponse saveWorkout(@Valid @RequestBody Workout workout) {
+    public ResponseEntity<String> saveWorkout(@Valid @RequestBody Workout workout) {
         return workoutService.saveWorkout(workout);
     }
 

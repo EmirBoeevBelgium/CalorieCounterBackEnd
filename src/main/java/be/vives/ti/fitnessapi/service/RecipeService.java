@@ -52,9 +52,12 @@ public class RecipeService {
 
     }
 
-    public RecipeResponse saveRecipe(Recipe savedRecipe) {
+    public ResponseEntity<String> saveRecipe(Recipe savedRecipe) {
+        if(recipeRepository.existsByRecipeName(savedRecipe.getRecipeName())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Recipe " + savedRecipe.getRecipeName() + " already exists.");
+        }
         Recipe recipe = recipeRepository.save(savedRecipe);
-        return new RecipeResponse(recipe);
+        return ResponseEntity.ok("Recipe " + recipe.getRecipeName() + " saved succesfully.");
     }
 
     public ResponseEntity<String> updateRecipe(Long id, Recipe updatedRecipe) {

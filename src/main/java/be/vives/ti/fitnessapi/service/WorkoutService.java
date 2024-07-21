@@ -8,6 +8,7 @@ import be.vives.ti.fitnessapi.response.RecipeResponse;
 import be.vives.ti.fitnessapi.response.WorkoutResponse;
 import jakarta.transaction.Transactional;
 import org.hibernate.jdbc.Work;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -54,9 +55,12 @@ public class WorkoutService {
 
     }
 
-    public WorkoutResponse saveWorkout(Workout savedWorkout) {
+    public ResponseEntity<String> saveWorkout(Workout savedWorkout) {
+        if(workoutRepository.existsByWorkoutName(savedWorkout.getWorkoutName())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Workout already exists.");
+        }
         Workout workout = workoutRepository.save(savedWorkout);
-        return new WorkoutResponse(workout);
+        return ResponseEntity.ok("Workout " + workout.getWorkoutName() + " saved succesfully.");
     }
 
     public ResponseEntity<String> updateWorkout(Long id, Workout updatedWorkout) {
