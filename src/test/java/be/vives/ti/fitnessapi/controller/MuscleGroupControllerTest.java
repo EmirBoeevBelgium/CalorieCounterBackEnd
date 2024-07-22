@@ -93,39 +93,62 @@ class MuscleGroupControllerTest {
     @Test
     void findByMuscleGroupNameUpperCase() throws Exception {
         MuscleGroupResponse biceps = new MuscleGroupResponse(muscleGroups.get(0));
-        when(muscleGroupService.findByMuscleGroupName("biceps")).thenReturn(ResponseEntity.ok(biceps));
-        mockMvc.perform(get(apiUrl).param("name", "BICEPS"))
+        when(muscleGroupService.findByMuscleGroupName("BICEPS")).thenReturn(ResponseEntity.ok(biceps));
+        mockMvc.perform(get(apiUrl + "/musclegroup").param("name", "BICEPS"))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].muscleGroupName", equalTo("Biceps")));
+                .andExpect(jsonPath("$.muscleGroupName", equalTo("Biceps")));
     }
 
     @Test
     void findByMuscleGroupNameLowerCase() throws Exception {
         MuscleGroupResponse biceps = new MuscleGroupResponse(muscleGroups.get(0));
         when(muscleGroupService.findByMuscleGroupName("biceps")).thenReturn(ResponseEntity.ok(biceps));
-        mockMvc.perform(get(apiUrl).param("name", "biceps"))
+        mockMvc.perform(get(apiUrl + "/musclegroup").param("name", "biceps"))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].muscleGroupName", equalTo("Biceps")));
+                .andExpect(jsonPath("$.muscleGroupName", equalTo("Biceps")));
     }
 
     @Test
     void findByMuscleGroupNameRandomCase() throws Exception {
         MuscleGroupResponse biceps = new MuscleGroupResponse(muscleGroups.get(0));
-        when(muscleGroupService.findByMuscleGroupName("biceps")).thenReturn(ResponseEntity.ok(biceps));
-        mockMvc.perform(get(apiUrl).param("name", "bIcEps"))
+        when(muscleGroupService.findByMuscleGroupName("bIcEps")).thenReturn(ResponseEntity.ok(biceps));
+        mockMvc.perform(get(apiUrl + "/musclegroup").param("name", "bIcEps"))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].muscleGroupName", equalTo("Biceps")));
+                .andExpect(jsonPath("$.muscleGroupName", equalTo("Biceps")));
     }
 
 
 
     @Test
-    void removeWorkoutFromMuscleGroup() {
+    void removeWorkoutFromMuscleGroup() throws Exception {
+        MuscleGroupResponse biceps = new MuscleGroupResponse(muscleGroups.get(0));
+
+        when(muscleGroupService.findByMuscleGroupName("bIcEps")).thenReturn(ResponseEntity.ok(biceps));
+        mockMvc.perform(get(apiUrl + "/musclegroup").param("name", "bIcEps"))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.workouts", hasSize(1)));
+
+        when(muscleGroupService.removeWorkout(1L, 1L)).thenReturn(ResponseEntity.ok("Workout 'Preacher curls' succesfully removed from muscle group."));
+        mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf(1L)).param("workoutid", String.valueOf(1L)))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        biceps.getWorkouts().clear();
+
+        when(muscleGroupService.findByMuscleGroupName("bIcEps")).thenReturn(ResponseEntity.ok(biceps));
+        mockMvc.perform(get(apiUrl + "/musclegroup").param("name", "bIcEps"))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.workouts", hasSize(0)));
     }
 }
