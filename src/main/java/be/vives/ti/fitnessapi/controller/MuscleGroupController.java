@@ -25,9 +25,10 @@ public class MuscleGroupController {
     }
 
     @GetMapping("musclegroup")
-    public ResponseEntity<MuscleGroupResponse> findByMuscleGroupName(@RequestParam("name") String muscleGroupName) {
-        return muscleGroupService.findByMuscleGroupName(muscleGroupName);
+    public ResponseEntity<MuscleGroupResponse> findByExactMuscleGroupName(@RequestParam("name") String muscleGroupName) {
+        return muscleGroupService.findByExactMuscleGroupName(muscleGroupName);
     }
+
 
     @PutMapping("workout")
     public ResponseEntity<String> removeWorkoutFromMuscleGroup(@RequestParam("musclegroupid") Long muscleGroupId, @RequestParam("workoutid") Long workoutId) {

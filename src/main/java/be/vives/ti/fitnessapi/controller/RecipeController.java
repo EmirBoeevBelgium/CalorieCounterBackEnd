@@ -1,13 +1,16 @@
 package be.vives.ti.fitnessapi.controller;
 
 import be.vives.ti.fitnessapi.domain.Recipe;
+import be.vives.ti.fitnessapi.request.RecipeRequest;
 import be.vives.ti.fitnessapi.response.RecipeResponse;
 import be.vives.ti.fitnessapi.service.RecipeService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping( value = "recipes", produces = "application/json")
@@ -36,17 +39,18 @@ public class RecipeController {
     }
 
     @DeleteMapping("recipe")
-    public ResponseEntity<Void> deleteById(@RequestParam("id") Long id) {
+    public ResponseEntity<String> deleteById(@RequestParam("id") Long id) {
         return recipeService.deleteById(id);
     }
 
     @PostMapping
-    public ResponseEntity<String> saveRecipe(@Valid @RequestBody Recipe recipe) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Object> saveRecipe(@Valid @RequestBody RecipeRequest recipe) {
         return recipeService.saveRecipe(recipe);
     }
 
     @PutMapping("recipe")
-    public ResponseEntity<String> updateRecipe(@RequestParam("id") Long id, @Valid @RequestBody Recipe updatedRecipe) {
+    public ResponseEntity<String> updateRecipe(@RequestParam("id") Long id, @Valid @RequestBody RecipeRequest updatedRecipe) {
         return recipeService.updateRecipe(id, updatedRecipe);
     }
 

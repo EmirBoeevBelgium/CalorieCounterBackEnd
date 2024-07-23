@@ -26,8 +26,8 @@ public class MuscleGroupService {
         return muscleGroups.stream().map(MuscleGroupResponse::new).collect(Collectors.toList());
     }
 
-    public ResponseEntity<MuscleGroupResponse> findByMuscleGroupName(String muscleGroupName) {
-        Optional<MuscleGroup> muscleGroup = muscleGroupRepository.findByMuscleGroupNameContainingIgnoreCase(muscleGroupName);
+    public ResponseEntity<MuscleGroupResponse> findByExactMuscleGroupName(String muscleGroupName) {
+        Optional<MuscleGroup> muscleGroup = muscleGroupRepository.findByMuscleGroupNameIgnoreCase(muscleGroupName);
 
         if(muscleGroup.isPresent()) {
             MuscleGroupResponse response = new MuscleGroupResponse(muscleGroup.get());

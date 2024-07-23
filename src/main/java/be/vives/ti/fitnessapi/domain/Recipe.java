@@ -1,6 +1,9 @@
 package be.vives.ti.fitnessapi.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
@@ -14,19 +17,25 @@ public class Recipe {
     private Long id;
 
     @NotNull
+    @NotEmpty
     private String recipeName;
 
     @NotNull
+    @NotEmpty
+    @Valid
     @ElementCollection
     @CollectionTable(name = "RECIPE_INSTRUCTIONS", joinColumns = @JoinColumn( name = "recipe_id"))
     private List<RecipeInstruction> recipeInstructions;
 
     @NotNull
+    @NotEmpty
+    @Valid
     @ElementCollection
     @CollectionTable(name = "RECIPE_INGREDIENTS", joinColumns = @JoinColumn( name = "recipe_id"))
     private List<RecipeIngredient> recipeIngredients;
 
     @NotNull
+    @Min(0)
     private double totalKiloCalories;
 
 

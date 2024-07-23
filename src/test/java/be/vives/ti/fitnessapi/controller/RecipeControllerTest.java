@@ -1,10 +1,14 @@
 package be.vives.ti.fitnessapi.controller;
 
 import be.vives.ti.fitnessapi.domain.*;
+import be.vives.ti.fitnessapi.request.RecipeIngredientRequest;
+import be.vives.ti.fitnessapi.request.RecipeInstructionRequest;
+import be.vives.ti.fitnessapi.request.RecipeRequest;
 import be.vives.ti.fitnessapi.response.MuscleGroupResponse;
 import be.vives.ti.fitnessapi.response.RecipeResponse;
 import be.vives.ti.fitnessapi.service.MuscleGroupService;
 import be.vives.ti.fitnessapi.service.RecipeService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,16 +18,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -149,15 +155,459 @@ class RecipeControllerTest {
     }
 
     @Test
-    void findByCaloriesBetween() {
+    void findByCaloriesBetween() throws Exception {
+        List<RecipeResponse> foundRecipes = new ArrayList<>();
+        foundRecipes.add(new RecipeResponse(recipes.get(0))); //Chicken and rice
+        foundRecipes.add(new RecipeResponse(recipes.get(2))); //Fried egg(s)
+
+        when(recipeService.findByCaloriesBetween(100, 300)).thenReturn(foundRecipes);
+        mockMvc.perform(get(apiUrl + "/calories").param("startcalories", String.valueOf(100))
+                        .param("endcalories", String.valueOf(300)))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].recipeName", equalTo("Chicken and rice")))
+                .andExpect(jsonPath("$[1].recipeName", equalTo("Fried eggs")));
     }
 
     @Test
-    void deleteById() {
+    void deleteById() throws Exception {
+        when(recipeService.deleteById(1L)).thenReturn(ResponseEntity.ok("Recipe 'Chicken and rice' succesfully deleted."));
+        mockMvc.perform(delete(apiUrl + "/recipe").param("id", String.valueOf(1L)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        when(recipeService.deleteById(1L)).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(delete(apiUrl + "/recipe").param("id", String.valueOf(1L)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
     }
 
     @Test
-    void saveRecipe() {
+    void deleteByIdNotFound() throws Exception {
+        when(recipeService.deleteById(15L)).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(delete(apiUrl + "/recipe").param("id", String.valueOf(15L)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+
+    }
+
+    @Test
+    void saveRecipe() throws Exception {
+        List<RecipeInstruction> instructions = new ArrayList<>();
+        RecipeInstruction testInstr1 = new RecipeInstruction("Instr 1", 1);
+        RecipeInstruction testInstr2 = new RecipeInstruction("Instr 2", 1);
+
+
+        List<RecipeIngredient> ingredients = new ArrayList<>();
+        RecipeIngredient testIngr1 = new RecipeIngredient("Ingr 1", "1");
+        RecipeIngredient testIngr2 = new RecipeIngredient("Ingr 2", "1");
+
+        instructions.add(testInstr1);
+        instructions.add(testInstr2);
+        ingredients.add(testIngr1);
+        ingredients.add(testIngr2);
+
+        Recipe testRecipe = new Recipe("Test recipe", instructions, ingredients, 100);
+
+
+        URI location = ServletUriComponentsBuilder.fromHttpUrl("http://localhost:8080/recipes?id=2").build().toUri();
+
+        when(recipeService.saveRecipe(any(RecipeRequest.class))).thenReturn(ResponseEntity.created(location).build());
+        mockMvc.perform(post(apiUrl)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(testRecipe)))
+                .andExpect(status().isCreated())
+                .andExpect(header().stringValues("location", "http://localhost:8080/recipes?id=2"));
+
+    }
+
+    @Test
+    void saveRecipeEmptyNameValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+        testIngred.setIngredientName("test ingr");
+        testIngred.setIngredientAmount("1 tbspn");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("instruction 1");
+        testInstr.setStep(1);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+        invalidRecipe.setTotalKiloCalories(100);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeNegativeKiloCalValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+        testIngred.setIngredientName("test ingr");
+        testIngred.setIngredientAmount("1 tbspn");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("instruction 1");
+        testInstr.setStep(1);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+        invalidRecipe.setTotalKiloCalories(-100);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+
+
+    @Test
+    void saveRecipeEmptyInstructionsValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+        testIngred.setIngredientName("test ingr");
+        testIngred.setIngredientAmount("1 tbspn");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeEmptyIngredientsValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("instruction 1");
+        testInstr.setStep(1);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeEmptyInstructionNameValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+
+        testIngred.setIngredientName("test ingr");
+        testIngred.setIngredientAmount("1 tbspn");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("");
+        testInstr.setStep(1);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeEmptyIngredientNameValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+
+        testIngred.setIngredientName("");
+        testIngred.setIngredientAmount("1 tbspn");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("instruction 1");
+        testInstr.setStep(1);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeNullInstructionNameValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+
+        testIngred.setIngredientName("test ingr");
+        testIngred.setIngredientAmount("1 tbspn");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setStep(1);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeNullIngredientNameValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+
+
+        testIngred.setIngredientAmount("1 tbspn");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("instruction 1");
+        testInstr.setStep(1);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeInstructionStepIsNullValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+
+        testIngred.setIngredientName("test ingr");
+        testIngred.setIngredientAmount("1 tbspn");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("instruction 1");
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeEmptyIngredientAmountValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+
+        testIngred.setIngredientName("test ingredient");
+        testIngred.setIngredientAmount("");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("instruction 1");
+        testInstr.setStep(1);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeInstructionStepIsZeroValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+
+        testIngred.setIngredientName("test ingr");
+        testIngred.setIngredientAmount("1 tbspn");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("instruction 1");
+        testInstr.setStep(0);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeIngredientAmountIsNullValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+
+        testIngred.setIngredientName("test ingr");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("instruction 1");
+        testInstr.setStep(1);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeOneValidAndOneInvalidIngredientValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest validIngred = new RecipeIngredientRequest();
+        RecipeIngredientRequest inValidIngred = new RecipeIngredientRequest();
+
+        validIngred.setIngredientName("test ingr");
+        validIngred.setIngredientAmount("2 tbspns");
+
+        ingrList.add(validIngred);
+        ingrList.add(inValidIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest testInstr = new RecipeInstructionRequest();
+        testInstr.setInstruction("instruction 1");
+        testInstr.setStep(1);
+        instrList.add(testInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    void saveRecipeOneValidAndOneInvalidInstructionValidationError() throws Exception {
+        List<RecipeIngredientRequest> ingrList = new ArrayList<>();
+        RecipeIngredientRequest testIngred = new RecipeIngredientRequest();
+
+        testIngred.setIngredientName("test ingr");
+        testIngred.setIngredientAmount("2 tbspns");
+        ingrList.add(testIngred);
+
+        List<RecipeInstructionRequest> instrList = new ArrayList<>();
+        RecipeInstructionRequest validInstr = new RecipeInstructionRequest();
+        RecipeInstructionRequest inValidInstr = new RecipeInstructionRequest();
+        validInstr.setInstruction("instruction 1");
+        validInstr.setStep(1);
+        instrList.add(validInstr);
+        instrList.add(inValidInstr);
+
+        RecipeRequest invalidRecipe = new RecipeRequest();
+
+        invalidRecipe.setRecipeName("test recipe");
+        invalidRecipe.setRecipeInstructions(instrList);
+        invalidRecipe.setRecipeIngredients(ingrList);
+
+        mockMvc.perform(post(apiUrl).content(objectMapper.writeValueAsString(invalidRecipe))
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
     }
 
     @Test

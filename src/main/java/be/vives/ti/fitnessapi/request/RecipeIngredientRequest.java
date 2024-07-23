@@ -1,12 +1,10 @@
-package be.vives.ti.fitnessapi.domain;
+package be.vives.ti.fitnessapi.request;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-@Embeddable
-public class RecipeIngredient {
+public class RecipeIngredientRequest {
     @NotNull
     @NotEmpty
     private String ingredientName;
@@ -15,15 +13,6 @@ public class RecipeIngredient {
     @NotEmpty
     @Column(length = 10)
     private String ingredientAmount;
-
-    public RecipeIngredient(String ingredientName, String ingredientAmount) {
-        this.ingredientName = ingredientName;
-        this.ingredientAmount = ingredientAmount;
-    }
-
-    protected RecipeIngredient() {
-
-    }
 
     public String getIngredientName() {
         return ingredientName;
