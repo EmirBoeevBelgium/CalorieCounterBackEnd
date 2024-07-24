@@ -4,6 +4,8 @@ import be.vives.ti.fitnessapi.domain.Recipe;
 import be.vives.ti.fitnessapi.domain.RecipeIngredient;
 import be.vives.ti.fitnessapi.domain.RecipeInstruction;
 import be.vives.ti.fitnessapi.repository.RecipeRepository;
+import be.vives.ti.fitnessapi.request.RecipeIngredientRequest;
+import be.vives.ti.fitnessapi.request.RecipeInstructionRequest;
 import be.vives.ti.fitnessapi.request.RecipeRequest;
 import be.vives.ti.fitnessapi.response.RecipeResponse;
 import jakarta.transaction.Transactional;
@@ -95,24 +97,30 @@ public class RecipeService {
     public ResponseEntity<String> updateRecipe(Long id, RecipeRequest updatedRecipe) {
         Optional<Recipe> foundRecipe = recipeRepository.findById(id);
 
-        if(foundRecipe.isPresent()) {
-
-            List<RecipeIngredient> recipeIngredients = updatedRecipe.getRecipeIngredients().stream()
-                    .map(req -> new RecipeIngredient(req.getIngredientName(), req.getIngredientAmount()))
-                    .toList();
-
-            List<RecipeInstruction> recipeInstructions = updatedRecipe.getRecipeInstructions().stream()
-                    .map(req -> new RecipeInstruction(req.getInstruction(), req.getStep()))
-                    .toList();
-
+        if (foundRecipe.isPresent()) {
             Recipe recipe = foundRecipe.get();
+
             recipe.setRecipeName(updatedRecipe.getRecipeName());
-            recipe.setRecipeIngredients(recipeIngredients);
-            recipe.setRecipeInstruction(recipeInstructions);
             recipe.setTotalKiloCalories(updatedRecipe.getTotalKiloCalories());
 
+            // Clear existing instructions and ingredients
+            recipe.getRecipeInstructions().clear();
+            recipe.getRecipeIngredients().clear();
+
+            // Add updated instructions
+            for (RecipeInstructionRequest instructionRequest : updatedRecipe.getRecipeInstructions()) {
+                RecipeInstruction instruction = new RecipeInstruction(instructionRequest.getInstruction(), instructionRequest.getStep());
+                recipe.addRecipeInstruction(instruction);
+            }
+
+            // Add updated ingredients
+            for (RecipeIngredientRequest ingredientRequest : updatedRecipe.getRecipeIngredients()) {
+                RecipeIngredient ingredient = new RecipeIngredient(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
+                recipe.addRecipeIngredient(ingredient);
+            }
+
             recipeRepository.save(recipe);
-            return ResponseEntity.ok("Recipe succesfully updated.");
+            return ResponseEntity.ok("Recipe successfully updated.");
         }
 
         return ResponseEntity.notFound().build();

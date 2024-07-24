@@ -87,6 +87,14 @@ public class Recipe {
         this.recipeIngredients = recipeIngredients;
     }
 
+    public void addRecipeInstruction(RecipeInstruction instruction) {
+        recipeInstructions.add(instruction);
+    }
+
+    public void addRecipeIngredient(RecipeIngredient ingredient) {
+        recipeIngredients.add(ingredient);
+    }
+
     public void setTotalKiloCalories(double totalKiloCalories) {
         this.totalKiloCalories = totalKiloCalories;
     }

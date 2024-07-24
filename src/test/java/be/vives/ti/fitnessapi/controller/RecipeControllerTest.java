@@ -1,10 +1,13 @@
 package be.vives.ti.fitnessapi.controller;
 
 import be.vives.ti.fitnessapi.domain.*;
+import be.vives.ti.fitnessapi.repository.RecipeRepository;
 import be.vives.ti.fitnessapi.request.RecipeIngredientRequest;
 import be.vives.ti.fitnessapi.request.RecipeInstructionRequest;
 import be.vives.ti.fitnessapi.request.RecipeRequest;
 import be.vives.ti.fitnessapi.response.MuscleGroupResponse;
+import be.vives.ti.fitnessapi.response.RecipeIngredientResponse;
+import be.vives.ti.fitnessapi.response.RecipeInstructionResponse;
 import be.vives.ti.fitnessapi.response.RecipeResponse;
 import be.vives.ti.fitnessapi.service.MuscleGroupService;
 import be.vives.ti.fitnessapi.service.RecipeService;
@@ -12,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,11 +27,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -41,6 +47,9 @@ class RecipeControllerTest {
 
     @MockBean
     private RecipeService recipeService;
+
+    @Mock
+    private RecipeRepository recipeRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -611,6 +620,89 @@ class RecipeControllerTest {
     }
 
     @Test
-    void updateRecipe() {
+    void updateRecipe() throws Exception {
+        Long recipeId = 3L;
+        RecipeIngredient testIngr = new RecipeIngredient("test ingredient", "1 tblspn");
+        RecipeInstruction testInstr = new RecipeInstruction("test ingredient", 1);
+
+        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+        List<RecipeInstruction> recipeInstructions = new ArrayList<>();
+
+        recipeIngredients.add(testIngr);
+        recipeInstructions.add(testInstr);
+
+        Recipe testRecipe = new Recipe("Test recipe", recipeInstructions, recipeIngredients, 100);
+        testRecipe.setId(recipeId);
+
+        RecipeResponse recipeResponse = new RecipeResponse(testRecipe);
+
+        when(recipeService.findById(recipeId)).thenReturn(ResponseEntity.ok(recipeResponse));
+
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientName("ingredient 1");
+        recipeIngredientRequestTest.setIngredientAmount("2 tblspns");
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setInstruction("instruction 1");
+        recipeInstructionRequestTest.setStep(2);
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("Test recipe");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(recipeId))
+                .content(objectMapper.writeValueAsString(testRecipeReq))
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void updateRecipeNotFound() throws Exception {
+
+        when(recipeService.findById(5L)).thenReturn(ResponseEntity.notFound().build());
+
+        verifyNoMoreInteractions(recipeService);
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientName("ingredient 1");
+        recipeIngredientRequestTest.setIngredientAmount("2 tblspns");
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setInstruction("instruction 1");
+        recipeInstructionRequestTest.setStep(2);
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("Test recipe");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+
+
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", "5")
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
+
+
     }
 }
