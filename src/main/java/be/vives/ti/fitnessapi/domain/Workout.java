@@ -23,8 +23,6 @@ public class Workout {
     private double burnedKiloCaloriesPHour;
 
 
-    @NotNull
-    @NotEmpty
     @ManyToMany(mappedBy = "musclegroupWorkouts")
     private List<MuscleGroup> workoutMuscleGroups = new ArrayList<>();
 

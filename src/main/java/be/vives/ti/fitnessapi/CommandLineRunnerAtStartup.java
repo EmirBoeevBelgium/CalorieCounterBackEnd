@@ -94,6 +94,90 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         RecipeIngredient rice = new RecipeIngredient("pouch cooked wholegrain rice", "200g");
         RecipeIngredient spinach = new RecipeIngredient("baby leaf spinach", "200g");
 
+        deltoids.addWorkout(barbellPress);
+        barbellPress.addMuscleGroup(deltoids);
+
+        deltoids.addWorkout(seatedOverheadPress);
+        seatedOverheadPress.addMuscleGroup(deltoids);
+
+        deltoids.addWorkout(machineLateralRaises);
+        machineLateralRaises.addMuscleGroup(deltoids);
+
+        deltoids.addWorkout(benchPress);
+        benchPress.addMuscleGroup(deltoids);
+
+        triceps.addWorkout(barbellPress);
+        barbellPress.addMuscleGroup(triceps);
+
+        triceps.addWorkout(seatedOverheadPress);
+        seatedOverheadPress.addMuscleGroup(triceps);
+
+        triceps.addWorkout(machineLateralRaises);
+        machineLateralRaises.addMuscleGroup(triceps);
+
+        triceps.addWorkout(benchPress);
+        benchPress.addMuscleGroup(triceps);
+
+        biceps.addWorkout(rowing);
+        rowing.addMuscleGroup(biceps);
+
+        biceps.addWorkout(alternateDumbellCurls);
+        alternateDumbellCurls.addMuscleGroup(biceps);
+
+        biceps.addWorkout(barbellRows);
+        barbellRows.addMuscleGroup(biceps);
+
+        wristFlexors.addWorkout(rowing);
+        rowing.addMuscleGroup(wristFlexors);
+
+        wristFlexors.addWorkout(alternateDumbellCurls);
+        alternateDumbellCurls.addMuscleGroup(wristFlexors);
+
+        wristFlexors.addWorkout(barbellRows);
+        barbellRows.addMuscleGroup(wristFlexors);
+
+        wristFlexors.addWorkout(barbellPress);
+        barbellPress.addMuscleGroup(wristFlexors);
+
+        wristFlexors.addWorkout(benchPress);
+        benchPress.addMuscleGroup(wristFlexors);
+
+        lats.addWorkout(rowing);
+        rowing.addMuscleGroup(lats);
+
+        abdominals.addWorkout(abdominalCrunches);
+        abdominalCrunches.addMuscleGroup(abdominals);
+
+        trapezius.addWorkout(barbellRows);
+        barbellRows.addMuscleGroup(trapezius);
+
+        quadriceps.addWorkout(rowing);
+        rowing.addMuscleGroup(quadriceps);
+
+        quadriceps.addWorkout(olympicBarbellLift);
+        olympicBarbellLift.addMuscleGroup(quadriceps);
+
+        quadriceps.addWorkout(cycling);
+        cycling.addMuscleGroup(quadriceps);
+
+        hamstrings.addWorkout(cycling);
+        cycling.addMuscleGroup(hamstrings);
+
+        calves.addWorkout(jogging);
+        jogging.addMuscleGroup(calves);
+
+        calves.addWorkout(cycling);
+        cycling.addMuscleGroup(calves);
+
+        heart.addWorkout(jogging);
+        jogging.addMuscleGroup(heart);
+
+        heart.addWorkout(rowing);
+        rowing.addMuscleGroup(heart);
+
+        heart.addWorkout(cycling);
+        cycling.addMuscleGroup(heart);
+
         List<RecipeIngredient> roastChickenIngredients = new ArrayList<>();
         roastChickenIngredients.add(chickenThighs);
         roastChickenIngredients.add(rapeseedOil);
@@ -118,6 +202,7 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
 
         recipeRepository.save(roastChickenThighs);
 
+
         workoutRepository.save(barbellPress);
         workoutRepository.save(seatedOverheadPress);
         workoutRepository.save(machineLateralRaises);
@@ -129,42 +214,6 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         workoutRepository.save(jogging);
         workoutRepository.save(cycling);
         workoutRepository.save(abdominalCrunches);
-
-
-        deltoids.addWorkout(barbellPress);
-        deltoids.addWorkout(seatedOverheadPress);
-        deltoids.addWorkout(machineLateralRaises);
-        deltoids.addWorkout(benchPress);
-
-        triceps.addWorkout(barbellPress);
-        triceps.addWorkout(seatedOverheadPress);
-        triceps.addWorkout(machineLateralRaises);
-        triceps.addWorkout(benchPress);
-
-        biceps.addWorkout(rowing);
-        biceps.addWorkout(alternateDumbellCurls);
-        biceps.addWorkout(barbellRows);
-
-        wristFlexors.addWorkout(rowing);
-        wristFlexors.addWorkout(alternateDumbellCurls);
-        wristFlexors.addWorkout(barbellRows);
-        wristFlexors.addWorkout(barbellPress);
-        wristFlexors.addWorkout(benchPress);
-
-        lats.addWorkout(rowing);
-        abdominals.addWorkout(abdominalCrunches);
-        trapezius.addWorkout(barbellRows);
-        quadriceps.addWorkout(rowing);
-        quadriceps.addWorkout(olympicBarbellLift);
-        quadriceps.addWorkout(cycling);
-        hamstrings.addWorkout(cycling);
-
-        calves.addWorkout(jogging);
-        calves.addWorkout(cycling);
-
-        heart.addWorkout(jogging);
-        heart.addWorkout(rowing);
-        heart.addWorkout(cycling);
 
         muscleGroupRepository.save(deltoids);
         muscleGroupRepository.save(biceps);

@@ -24,8 +24,6 @@ public class MuscleGroup {
     private String muscleGroupDescription;
 
 
-    @NotNull
-    @NotEmpty
     @ManyToMany
     @JoinTable(
             name = "musclegroup_workout",
