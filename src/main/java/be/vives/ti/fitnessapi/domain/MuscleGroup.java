@@ -1,6 +1,7 @@
 package be.vives.ti.fitnessapi.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.jdbc.Work;
 
@@ -23,6 +24,8 @@ public class MuscleGroup {
     private String muscleGroupDescription;
 
 
+    @NotNull
+    @NotEmpty
     @ManyToMany
     @JoinTable(
             name = "musclegroup_workout",

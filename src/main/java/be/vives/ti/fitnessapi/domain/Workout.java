@@ -1,6 +1,7 @@
 package be.vives.ti.fitnessapi.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public class Workout {
     private double burnedKiloCaloriesPHour;
 
 
+    @NotNull
+    @NotEmpty
     @ManyToMany(mappedBy = "musclegroupWorkouts")
     private List<MuscleGroup> workoutMuscleGroups = new ArrayList<>();
 

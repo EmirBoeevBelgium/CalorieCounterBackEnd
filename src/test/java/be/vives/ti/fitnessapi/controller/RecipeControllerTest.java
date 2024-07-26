@@ -48,8 +48,6 @@ class RecipeControllerTest {
     @MockBean
     private RecipeService recipeService;
 
-    @Mock
-    private RecipeRepository recipeRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -164,6 +162,14 @@ class RecipeControllerTest {
     }
 
     @Test
+    void findByRecipeNameNotFound() throws Exception {
+        when(recipeService.findByRecipeName("nothing")).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(get(apiUrl + "/recipe").param("name", "nothing"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void findByCaloriesBetween() throws Exception {
         List<RecipeResponse> foundRecipes = new ArrayList<>();
         foundRecipes.add(new RecipeResponse(recipes.get(0))); //Chicken and rice
@@ -178,6 +184,32 @@ class RecipeControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].recipeName", equalTo("Chicken and rice")))
                 .andExpect(jsonPath("$[1].recipeName", equalTo("Fried eggs")));
+    }
+
+    @Test
+    void findByCaloriesBetweenEmptyList() throws Exception {
+        List<RecipeResponse> foundRecipes = new ArrayList<>();
+
+        when(recipeService.findByCaloriesBetween(0, 10)).thenReturn(foundRecipes);
+        mockMvc.perform(get(apiUrl + "/calories").param("startcalories", String.valueOf(0))
+                        .param("endcalories", String.valueOf(10)))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    void findByCaloriesBetweenFirstCaloriesGreaterThanLastCalories() throws Exception {
+        List<RecipeResponse> foundRecipes = new ArrayList<>();
+
+        when(recipeService.findByCaloriesBetween(10, 0)).thenReturn(foundRecipes);
+        mockMvc.perform(get(apiUrl + "/calories").param("startcalories", String.valueOf(0))
+                        .param("endcalories", String.valueOf(10)))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
@@ -702,6 +734,368 @@ class RecipeControllerTest {
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void updateRecipeNullNameValidationError() throws Exception {
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientName("ingredient 1");
+        recipeIngredientRequestTest.setIngredientAmount("2 tblspns");
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setInstruction("instruction 1");
+        recipeInstructionRequestTest.setStep(2);
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
+    void updateRecipeEmptyNameValidationError() throws Exception {
+
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientName("ingredient 1");
+        recipeIngredientRequestTest.setIngredientAmount("2 tblspns");
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setInstruction("instruction 1");
+        recipeInstructionRequestTest.setStep(2);
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
+    void updateRecipeEmptyInstructionsValidationError() throws Exception {
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientName("ingredient 1");
+        recipeIngredientRequestTest.setIngredientAmount("2 tblspns");
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("test 1");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
+    void updateRecipeEmptyIngredientsValidationError() throws Exception {
+
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setInstruction("instruction 1");
+        recipeInstructionRequestTest.setStep(2);
+
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("test 1");
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
+    void updateRecipeNoInstructionNameValidationError() throws Exception {
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientName("ingredient 1");
+        recipeIngredientRequestTest.setIngredientAmount("2 tblspns");
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setStep(2);
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("test 1");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
+    void updateRecipeNoInstructionStepValidationError() throws Exception {
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientName("ingredient 1");
+        recipeIngredientRequestTest.setIngredientAmount("2 tblspns");
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setInstruction("instruction 2");
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("test 1");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
+    void updateRecipeNoIngredientNameValidationError() throws Exception {
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientAmount("2 tblspns");
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setInstruction("instruction 2");
+        recipeInstructionRequestTest.setStep(2);
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("test 1");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
+    void updateRecipeNoIngredientAmountValidationError() throws Exception {
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientName("ingredient 1");
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setInstruction("instruction 2");
+        recipeInstructionRequestTest.setStep(2);
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("test 1");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+
+    }
+    @Test
+    void updateRecipeOneValidAndOneInvalidInstructionValidationError() throws Exception {
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientName("ingredient 1");
+        recipeIngredientRequestTest.setIngredientAmount("2 tblspns");
+
+        RecipeInstructionRequest validInstruction = new RecipeInstructionRequest();
+        validInstruction.setInstruction("instruction 2");
+        validInstruction.setStep(2);
+
+        RecipeInstructionRequest inValidInstruction = new RecipeInstructionRequest();
+        inValidInstruction.setStep(2);
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+        recipeInstructionRequests.add(validInstruction);
+        recipeInstructionRequests.add(inValidInstruction);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("test 1");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
+    void updateRecipeOneValidAndOneInvalidIngredientValidationError() throws Exception {
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest validIngredient = new RecipeIngredientRequest();
+        validIngredient.setIngredientName("ingredient 1");
+        validIngredient.setIngredientAmount("2 tblspns");
+
+        RecipeIngredientRequest inValidIngredient = new RecipeIngredientRequest();
+        inValidIngredient.setIngredientAmount("2 tblspns");
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setInstruction("instruction 2");
+        recipeInstructionRequestTest.setStep(2);
+
+        recipeIngredientRequests.add(validIngredient);
+        recipeIngredientRequests.add(inValidIngredient);
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("test 1");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+
+    }
+
+    @Test
+    void updateRecipeNegativeCaloriesValidationError() throws Exception {
+
+        List<RecipeIngredientRequest> recipeIngredientRequests = new ArrayList<>();
+        List<RecipeInstructionRequest> recipeInstructionRequests = new ArrayList<>();
+
+        RecipeIngredientRequest recipeIngredientRequestTest = new RecipeIngredientRequest();
+        recipeIngredientRequestTest.setIngredientName("ingredient 1");
+        recipeIngredientRequestTest.setIngredientAmount("2 tblspns");
+
+        RecipeInstructionRequest recipeInstructionRequestTest = new RecipeInstructionRequest();
+        recipeInstructionRequestTest.setInstruction("instruction 2");
+        recipeInstructionRequestTest.setStep(2);
+
+        recipeIngredientRequests.add(recipeIngredientRequestTest);
+        recipeInstructionRequests.add(recipeInstructionRequestTest);
+
+        RecipeRequest testRecipeReq = new RecipeRequest();
+        testRecipeReq.setRecipeName("test 1");
+        testRecipeReq.setRecipeIngredients(recipeIngredientRequests);
+        testRecipeReq.setRecipeInstructions(recipeInstructionRequests);
+        testRecipeReq.setTotalKiloCalories(-200);
+
+
+        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+                        .content(objectMapper.writeValueAsString(testRecipeReq))
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
 
 
     }

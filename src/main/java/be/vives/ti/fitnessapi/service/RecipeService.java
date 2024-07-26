@@ -103,17 +103,14 @@ public class RecipeService {
             recipe.setRecipeName(updatedRecipe.getRecipeName());
             recipe.setTotalKiloCalories(updatedRecipe.getTotalKiloCalories());
 
-            // Clear existing instructions and ingredients
             recipe.getRecipeInstructions().clear();
             recipe.getRecipeIngredients().clear();
 
-            // Add updated instructions
             for (RecipeInstructionRequest instructionRequest : updatedRecipe.getRecipeInstructions()) {
                 RecipeInstruction instruction = new RecipeInstruction(instructionRequest.getInstruction(), instructionRequest.getStep());
                 recipe.addRecipeInstruction(instruction);
             }
 
-            // Add updated ingredients
             for (RecipeIngredientRequest ingredientRequest : updatedRecipe.getRecipeIngredients()) {
                 RecipeIngredient ingredient = new RecipeIngredient(ingredientRequest.getIngredientName(), ingredientRequest.getIngredientAmount());
                 recipe.addRecipeIngredient(ingredient);

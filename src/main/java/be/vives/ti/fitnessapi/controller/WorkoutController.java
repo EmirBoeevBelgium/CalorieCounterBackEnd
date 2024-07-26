@@ -2,10 +2,12 @@ package be.vives.ti.fitnessapi.controller;
 
 import be.vives.ti.fitnessapi.domain.Recipe;
 import be.vives.ti.fitnessapi.domain.Workout;
+import be.vives.ti.fitnessapi.request.WorkoutRequest;
 import be.vives.ti.fitnessapi.response.RecipeResponse;
 import be.vives.ti.fitnessapi.response.WorkoutResponse;
 import be.vives.ti.fitnessapi.service.WorkoutService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +28,8 @@ public class WorkoutController {
     }
 
     @GetMapping("workout")
-    public ResponseEntity<WorkoutResponse> findByRecipeName(@RequestParam("name") String workoutName) {
-        return workoutService.findByWorkoutName(workoutName);
+    public ResponseEntity<WorkoutResponse> findByExactWorkoutName(@RequestParam("name") String workoutName) {
+        return workoutService.findByExactWorkoutName(workoutName);
     }
 
     @GetMapping("calories")
@@ -38,18 +40,19 @@ public class WorkoutController {
     }
 
     @DeleteMapping("workout")
-    public ResponseEntity<Void> deleteById(@RequestParam("id") Long id) {
+    public ResponseEntity<String> deleteById(@RequestParam("id") Long id) {
         return workoutService.deleteById(id);
     }
 
     //Moet nog functie voorzien dat kijkt of recept al bestaat.
     @PostMapping
-    public ResponseEntity<String> saveWorkout(@Valid @RequestBody Workout workout) {
-        return workoutService.saveWorkout(workout);
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Object> saveWorkout(@Valid @RequestBody WorkoutRequest savedWorkout) {
+        return workoutService.saveWorkout(savedWorkout);
     }
 
     @PutMapping("workout")
-    public ResponseEntity<String> updateWorkout(@RequestParam("id") Long id, @Valid @RequestBody Workout updatedWorkout) {
+    public ResponseEntity<String> updateWorkout(@RequestParam("id") Long id, @Valid @RequestBody WorkoutRequest updatedWorkout) {
         return workoutService.updateWorkout(id, updatedWorkout);
     }
 
