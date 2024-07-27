@@ -149,10 +149,21 @@ class MuscleGroupControllerTest {
     }
 
     @Test
-    void removeWorkoutFromMuscleGroupNotFound() throws Exception {
+    void removeWorkoutFromMuscleGroupButWorkoutNotFound() throws Exception {
 
         when(muscleGroupService.removeWorkout(1L, 2L)).thenReturn(ResponseEntity.notFound().build());
         mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf(1L)).param("workoutid", String.valueOf(2L)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+
+    }
+
+    @Test
+    void removeWorkoutFromMuscleGroupButMuscleGroupNotFound() throws Exception {
+
+        when(muscleGroupService.removeWorkout(100L, 1L)).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf(100L)).param("workoutid", String.valueOf(1L)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
