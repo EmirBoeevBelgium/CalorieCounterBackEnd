@@ -9,6 +9,7 @@ Domeinmodellen:
 De id's van alle domeinmodellen worden automatisch gegenereerd.
 
 **MuscleGroup**
+
 Houdt de naam en beschrijving van de spiergroep bij.
 Het houdt ook de verschillende soorten oefeningen bij die op de respectievelijke spiergroep
 gericht is. 
