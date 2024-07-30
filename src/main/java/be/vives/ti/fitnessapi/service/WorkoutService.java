@@ -66,9 +66,9 @@ public class WorkoutService {
         Optional<Workout> workout = workoutRepository.findById(id);
 
         if (workout.isPresent()) {
-            List<String> muscleGroupIds = new ArrayList<>(workout.get().getWorkoutMuscleGroups());
+            List<String> muscleGroups = new ArrayList<>(workout.get().getWorkoutMuscleGroupIds());
 
-            for (String muscleGroupId : muscleGroupIds) {
+            for (String muscleGroupId : muscleGroups) {
                 MuscleGroup muscleGroup = muscleGroupRepository.findById(muscleGroupId).get();
                 muscleGroup.removeWorkoutById(workout.get().getId());
                 muscleGroupRepository.save(muscleGroup);
@@ -140,12 +140,12 @@ public class WorkoutService {
                 }
             }
 
-            for (String muscleGroupId : myUpdatedWorkout.getWorkoutMuscleGroups()) {
+            for (String muscleGroupId : myUpdatedWorkout.getWorkoutMuscleGroupIds()) {
                 MuscleGroup muscleGroup = muscleGroupRepository.findById(muscleGroupId).get();
                 muscleGroup.getMuscleGroupWorkouts().remove(myUpdatedWorkout);
                 muscleGroupRepository.save(muscleGroup);
             }
-            myUpdatedWorkout.getWorkoutMuscleGroups().clear();
+            myUpdatedWorkout.getWorkoutMuscleGroupIds().clear();
 
             myUpdatedWorkout.setMuscleGroups(muscleGroupIds);
             workoutRepository.save(myUpdatedWorkout);
@@ -167,7 +167,6 @@ public class WorkoutService {
 
         if(foundWorkout.isPresent()) {
             Workout workout = foundWorkout.get();
-
 
             MuscleGroup foundMusclegroup = muscleGroupRepository.findById(muscleGroupId).get();
             workout.removeMuscleGroupById(muscleGroupId);

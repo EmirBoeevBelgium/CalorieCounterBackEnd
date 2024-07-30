@@ -50,24 +50,24 @@ public class Workout {
         return burnedKiloCaloriesPHour;
     }
 
-    public List<String> getWorkoutMuscleGroups() {
+    public List<String> getWorkoutMuscleGroupIds() {
         return workoutMuscleGroupIds;
     }
 
     public String removeMuscleGroupById(String id) {
-        String foundMuscleGroup = new String();
+        String foundMuscleGroupId = new String();
         int i = 0;
         boolean muscleGroupFound = false;
         while (i < workoutMuscleGroupIds.size() && !muscleGroupFound) {
             if (Objects.equals(workoutMuscleGroupIds.get(i), id)) {
-                foundMuscleGroup = workoutMuscleGroupIds.get(i);
+                foundMuscleGroupId = workoutMuscleGroupIds.get(i);
                 workoutMuscleGroupIds.remove(i);
-                //foundMuscleGroup.getMuscleGroupWorkouts().remove(this);
+                //foundMuscleGroupId.getMuscleGroupWorkouts().remove(this);
                 muscleGroupFound = true;
             }
             i++;
         }
-        return foundMuscleGroup;
+        return foundMuscleGroupId;
     }
 
     public void setId(String id) {
@@ -82,12 +82,12 @@ public class Workout {
         this.burnedKiloCaloriesPHour = burnedKiloCaloriesPHour;
     }
 
-    public void setMuscleGroups(List<String> muscleGroups) {
-        this.workoutMuscleGroupIds = muscleGroups;
+    public void setMuscleGroups(List<String> muscleGroupIds) {
+        this.workoutMuscleGroupIds = muscleGroupIds;
     }
 
-    public void addMuscleGroup(String muscleGroupId) {
-        this.workoutMuscleGroupIds.add(muscleGroupId);
+    public void addMuscleGroup(MuscleGroup muscleGroup) {
+        this.workoutMuscleGroupIds.add(muscleGroup.getId());
     }
 
     @Override

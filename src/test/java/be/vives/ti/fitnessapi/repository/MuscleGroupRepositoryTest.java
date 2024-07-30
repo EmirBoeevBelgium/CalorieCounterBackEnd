@@ -36,7 +36,7 @@ class MuscleGroupRepositoryTest {
 
         benchPress = workoutRepository.save(benchPress);
 
-        benchPress.addMuscleGroup(pectorals.getId());
+        benchPress.addMuscleGroup(pectorals);
         pectorals.addWorkout(benchPress);
 
         pectorals = muscleGroupRepository.save(pectorals);
@@ -56,7 +56,7 @@ class MuscleGroupRepositoryTest {
         Workout barbellPress = new Workout("Barbell overhead press", 300);
         barbellPress = workoutRepository.save(barbellPress);
         pectorals.addWorkout(barbellPress);
-        barbellPress.addMuscleGroup(pectorals.getId());
+        barbellPress.addMuscleGroup(pectorals);
 
         pectorals = muscleGroupRepository.save(pectorals);
         barbellPress = workoutRepository.save(barbellPress);
@@ -71,7 +71,7 @@ class MuscleGroupRepositoryTest {
         biceps = muscleGroupRepository.save(biceps);
         dumbellCurls = workoutRepository.save(dumbellCurls);
         biceps.addWorkout(dumbellCurls);
-        dumbellCurls.addMuscleGroup(biceps.getId());
+        dumbellCurls.addMuscleGroup(biceps);
         muscleGroupRepository.save(biceps);
         workoutRepository.save(dumbellCurls);
         assertThat(biceps.getId()).isNotNull();
@@ -94,7 +94,7 @@ class MuscleGroupRepositoryTest {
         muscleGroupRepository.save(biceps);
         workoutRepository.save(dumbellCurls);
         biceps.addWorkout(dumbellCurls);
-        dumbellCurls.addMuscleGroup(biceps.getId());
+        dumbellCurls.addMuscleGroup(biceps);
         muscleGroupRepository.save(biceps);
         workoutRepository.save(dumbellCurls);
 
@@ -103,7 +103,7 @@ class MuscleGroupRepositoryTest {
         muscleGroupRepository.save(pecs);
         workoutRepository.save(benchpress);
         pecs.addWorkout(benchpress);
-        benchpress.addMuscleGroup(pecs.getId());
+        benchpress.addMuscleGroup(pecs);
         muscleGroupRepository.save(pecs);
         workoutRepository.save(benchpress);
 
@@ -112,7 +112,7 @@ class MuscleGroupRepositoryTest {
         muscleGroupRepository.save(quads);
         workoutRepository.save(squats);
         quads.addWorkout(squats);
-        squats.addMuscleGroup(quads.getId());
+        squats.addMuscleGroup(quads);
         muscleGroupRepository.save(quads);
         workoutRepository.save(squats);
 
