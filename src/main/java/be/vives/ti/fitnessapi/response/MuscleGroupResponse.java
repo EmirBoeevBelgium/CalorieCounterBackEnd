@@ -12,7 +12,7 @@ public class MuscleGroupResponse {
 
     private String muscleGroupDescription;
 
-    private List<MuscleGroupWorkoutResponse> workouts;
+    //private List<MuscleGroupWorkoutResponse> workouts;
 
     public MuscleGroupResponse(MuscleGroup muscleGroup) {
         this.id = muscleGroup.getId();
@@ -33,7 +33,7 @@ public class MuscleGroupResponse {
         return muscleGroupDescription;
     }
 
-    public List<MuscleGroupWorkoutResponse> getWorkouts() {
+    /*public List<MuscleGroupWorkoutResponse> getWorkouts() {
         return workouts;
-    }
+    }*/
 }
