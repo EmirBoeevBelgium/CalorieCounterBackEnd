@@ -275,88 +275,88 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         RecipeIngredient spinach = new RecipeIngredient("baby leaf spinach", "200g");
 
         deltoids.addWorkout(barbellPress);
-        barbellPress.addMuscleGroup(deltoids);
+        barbellPress.addMuscleGroupId(deltoids.getId());
 
         deltoids.addWorkout(seatedOverheadPress);
-        seatedOverheadPress.addMuscleGroup(deltoids);
+        seatedOverheadPress.addMuscleGroupId(deltoids.getId());
 
         deltoids.addWorkout(machineLateralRaises);
-        machineLateralRaises.addMuscleGroup(deltoids);
+        machineLateralRaises.addMuscleGroupId(deltoids.getId());
 
         deltoids.addWorkout(benchPress);
-        benchPress.addMuscleGroup(deltoids);
+        benchPress.addMuscleGroupId(deltoids.getId());
 
         triceps.addWorkout(barbellPress);
-        barbellPress.addMuscleGroup(triceps);
+        barbellPress.addMuscleGroupId(triceps.getId());
 
         triceps.addWorkout(seatedOverheadPress);
-        seatedOverheadPress.addMuscleGroup(triceps);
+        seatedOverheadPress.addMuscleGroupId(triceps.getId());
 
         triceps.addWorkout(machineLateralRaises);
-        machineLateralRaises.addMuscleGroup(triceps);
+        machineLateralRaises.addMuscleGroupId(triceps.getId());
 
         triceps.addWorkout(benchPress);
-        benchPress.addMuscleGroup(triceps);
+        benchPress.addMuscleGroupId(triceps.getId());
 
         biceps.addWorkout(rowing);
-        rowing.addMuscleGroup(biceps);
+        rowing.addMuscleGroupId(biceps.getId());
 
         biceps.addWorkout(alternateDumbellCurls);
-        alternateDumbellCurls.addMuscleGroup(biceps);
+        alternateDumbellCurls.addMuscleGroupId(biceps.getId());
 
         biceps.addWorkout(barbellRows);
-        barbellRows.addMuscleGroup(biceps);
+        barbellRows.addMuscleGroupId(biceps.getId());
 
         wristFlexors.addWorkout(rowing);
-        rowing.addMuscleGroup(wristFlexors);
+        rowing.addMuscleGroupId(wristFlexors.getId());
 
         wristFlexors.addWorkout(alternateDumbellCurls);
-        alternateDumbellCurls.addMuscleGroup(wristFlexors);
+        alternateDumbellCurls.addMuscleGroupId(wristFlexors.getId());
 
         wristFlexors.addWorkout(barbellRows);
-        barbellRows.addMuscleGroup(wristFlexors);
+        barbellRows.addMuscleGroupId(wristFlexors.getId());
 
         wristFlexors.addWorkout(barbellPress);
-        barbellPress.addMuscleGroup(wristFlexors);
+        barbellPress.addMuscleGroupId(wristFlexors.getId());
 
         wristFlexors.addWorkout(benchPress);
-        benchPress.addMuscleGroup(wristFlexors);
+        benchPress.addMuscleGroupId(wristFlexors.getId());
 
         lats.addWorkout(rowing);
-        rowing.addMuscleGroup(lats);
+        rowing.addMuscleGroupId(lats.getId());
 
         abdominals.addWorkout(abdominalCrunches);
-        abdominalCrunches.addMuscleGroup(abdominals);
+        abdominalCrunches.addMuscleGroupId(abdominals.getId());
 
         trapezius.addWorkout(barbellRows);
-        barbellRows.addMuscleGroup(trapezius);
+        barbellRows.addMuscleGroupId(trapezius.getId());
 
         quadriceps.addWorkout(rowing);
-        rowing.addMuscleGroup(quadriceps);
+        rowing.addMuscleGroupId(quadriceps.getId());
 
         quadriceps.addWorkout(olympicBarbellLift);
-        olympicBarbellLift.addMuscleGroup(quadriceps);
+        olympicBarbellLift.addMuscleGroupId(quadriceps.getId());
 
         quadriceps.addWorkout(cycling);
-        cycling.addMuscleGroup(quadriceps);
+        cycling.addMuscleGroupId(quadriceps.getId());
 
         hamstrings.addWorkout(cycling);
-        cycling.addMuscleGroup(hamstrings);
+        cycling.addMuscleGroupId(hamstrings.getId());
 
         calves.addWorkout(jogging);
-        jogging.addMuscleGroup(calves);
+        jogging.addMuscleGroupId(calves.getId());
 
         calves.addWorkout(cycling);
-        cycling.addMuscleGroup(calves);
+        cycling.addMuscleGroupId(calves.getId());
 
         heart.addWorkout(jogging);
-        jogging.addMuscleGroup(heart);
+        jogging.addMuscleGroupId(heart.getId());
 
         heart.addWorkout(rowing);
-        rowing.addMuscleGroup(heart);
+        rowing.addMuscleGroupId(heart.getId());
 
         heart.addWorkout(cycling);
-        cycling.addMuscleGroup(heart);
+        cycling.addMuscleGroupId(heart.getId());
 
         List<RecipeIngredient> roastChickenIngredients = new ArrayList<>();
         roastChickenIngredients.add(chickenThighs);

@@ -66,9 +66,10 @@ public class WorkoutService {
         Optional<Workout> workout = workoutRepository.findById(id);
 
         if (workout.isPresent()) {
-            List<MuscleGroup> muscleGroups = new ArrayList<>(workout.get().getWorkoutMuscleGroups());
+            List<String> muscleGroupIds = new ArrayList<>(workout.get().getWorkoutMuscleGroupIds());
 
-            for (MuscleGroup muscleGroup : muscleGroups) {
+            for (String muscleGroupId : muscleGroupIds) {
+                MuscleGroup muscleGroup = muscleGroupRepository.findById(muscleGroupId).get();
                 muscleGroup.removeWorkoutById(workout.get().getId());
                 muscleGroupRepository.save(muscleGroup);
             }
@@ -103,7 +104,7 @@ public class WorkoutService {
             }
         }
 
-        mySavedWorkout.setMuscleGroups(muscleGroups);
+        mySavedWorkout.setMuscleGroupIds(muscleGroupIds);
 
         workoutRepository.save(mySavedWorkout);
 
@@ -139,13 +140,14 @@ public class WorkoutService {
                 }
             }
 
-            for (MuscleGroup muscleGroup : myUpdatedWorkout.getWorkoutMuscleGroups()) {
+            for (String muscleGroupId : myUpdatedWorkout.getWorkoutMuscleGroupIds()) {
+                MuscleGroup muscleGroup = muscleGroupRepository.findById(muscleGroupId).get();
                 muscleGroup.getMuscleGroupWorkouts().remove(myUpdatedWorkout);
                 muscleGroupRepository.save(muscleGroup);
             }
-            myUpdatedWorkout.getWorkoutMuscleGroups().clear();
+            myUpdatedWorkout.getWorkoutMuscleGroupIds().clear();
 
-            myUpdatedWorkout.setMuscleGroups(muscleGroups);
+            myUpdatedWorkout.setMuscleGroupIds(muscleGroupIds);
             workoutRepository.save(myUpdatedWorkout);
 
             for (MuscleGroup muscleGroup : muscleGroups) {
@@ -166,7 +168,8 @@ public class WorkoutService {
         if(foundWorkout.isPresent()) {
             Workout workout = foundWorkout.get();
 
-            MuscleGroup foundMusclegroup = workout.removeMuscleGroupById(muscleGroupId);
+            MuscleGroup foundMusclegroup = muscleGroupRepository.findById(muscleGroupId).get();
+            workout.removeMuscleGroupById(muscleGroupId);
 
 
             workoutRepository.save(workout);

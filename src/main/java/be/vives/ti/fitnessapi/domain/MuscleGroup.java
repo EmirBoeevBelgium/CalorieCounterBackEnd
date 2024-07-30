@@ -62,7 +62,7 @@ public class MuscleGroup {
             if (Objects.equals(musclegroupWorkouts.get(i).getId(), id)) {
                 foundWorkout = musclegroupWorkouts.get(i);
                 musclegroupWorkouts.remove(i);
-                foundWorkout.getWorkoutMuscleGroups().remove(this);
+               // foundWorkout.getWorkoutMuscleGroups().remove(this);
                 workoutFound = true;
             }
             i++;
