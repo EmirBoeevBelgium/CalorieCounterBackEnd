@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 //import org.hibernate.jdbc.Work;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -28,7 +29,7 @@ public class MuscleGroup {
     @Field("muscleGroupDescription")
     private String muscleGroupDescription;
 
-
+    @DBRef
     private List<Workout> musclegroupWorkouts = new ArrayList<>();
 
     public MuscleGroup(String muscleGroupName, String muscleGroupDescription) {
