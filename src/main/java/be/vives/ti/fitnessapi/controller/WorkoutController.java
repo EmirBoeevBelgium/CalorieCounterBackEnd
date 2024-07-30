@@ -1,9 +1,6 @@
 package be.vives.ti.fitnessapi.controller;
 
-import be.vives.ti.fitnessapi.domain.Recipe;
-import be.vives.ti.fitnessapi.domain.Workout;
 import be.vives.ti.fitnessapi.request.WorkoutRequest;
-import be.vives.ti.fitnessapi.response.RecipeResponse;
 import be.vives.ti.fitnessapi.response.WorkoutResponse;
 import be.vives.ti.fitnessapi.service.WorkoutService;
 import jakarta.validation.Valid;
