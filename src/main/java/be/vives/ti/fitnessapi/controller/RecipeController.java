@@ -39,7 +39,7 @@ public class RecipeController {
     }
 
     @DeleteMapping("recipe")
-    public ResponseEntity<String> deleteById(@RequestParam("id") Long id) {
+    public ResponseEntity<String> deleteById(@RequestParam("id") String id) {
         return recipeService.deleteById(id);
     }
 
@@ -50,7 +50,7 @@ public class RecipeController {
     }
 
     @PutMapping("recipe")
-    public ResponseEntity<String> updateRecipe(@RequestParam("id") Long id, @Valid @RequestBody RecipeRequest updatedRecipe) {
+    public ResponseEntity<String> updateRecipe(@RequestParam("id") String id, @Valid @RequestBody RecipeRequest updatedRecipe) {
         return recipeService.updateRecipe(id, updatedRecipe);
     }
 

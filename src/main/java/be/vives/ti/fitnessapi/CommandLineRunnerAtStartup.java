@@ -4,7 +4,7 @@ import be.vives.ti.fitnessapi.domain.*;
 import be.vives.ti.fitnessapi.repository.MuscleGroupRepository;
 import be.vives.ti.fitnessapi.repository.RecipeRepository;
 import be.vives.ti.fitnessapi.repository.WorkoutRepository;
-import org.hibernate.jdbc.Work;
+//import org.hibernate.jdbc.Work;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +12,165 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 @Component
 public class CommandLineRunnerAtStartup implements CommandLineRunner {
+   /* private final RecipeRepository recipeRepository;
+    private final WorkoutRepository workoutRepository;
+    private final MuscleGroupRepository muscleGroupRepository;
+
+    public CommandLineRunnerAtStartup(RecipeRepository recipeRepository, WorkoutRepository workoutRepository, MuscleGroupRepository muscleGroupRepository) {
+        this.recipeRepository = recipeRepository;
+        this.workoutRepository = workoutRepository;
+        this.muscleGroupRepository = muscleGroupRepository;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        List<RecipeInstruction> recipeInstructions = new ArrayList<>();
+        RecipeInstruction recipeInstruction = new RecipeInstruction("Test instr", 1);
+        recipeInstructions.add(recipeInstruction);
+
+        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+        RecipeIngredient recipeIngredient = new RecipeIngredient("Test ingr", "1 tblsp");
+        recipeIngredients.add(recipeIngredient);
+
+        recipeRepository.save(new Recipe("test recipe", recipeInstructions, recipeIngredients, 100));
+
+        // Create MuscleGroup entities
+        MuscleGroup deltoids = new MuscleGroup("Deltoids", "Your deltoid muscles work...");
+        MuscleGroup biceps = new MuscleGroup("Biceps", "The biceps is one of four muscles...");
+        MuscleGroup triceps = new MuscleGroup("Triceps", "The triceps brachii is a large...");
+        MuscleGroup pectorals = new MuscleGroup("Pectorals", "The pectoralis major...");
+        MuscleGroup trapezius = new MuscleGroup("Trapezius", "The trapezius...");
+        MuscleGroup abdominals = new MuscleGroup("Abdominals", "The abdominal muscles...");
+        MuscleGroup wristFlexors = new MuscleGroup("Wrist flexors", "This muscle group is...");
+        MuscleGroup quadriceps = new MuscleGroup("Quadriceps", "The quadriceps are a group...");
+        MuscleGroup lats = new MuscleGroup("Lats", "The latissimus dorsi muscle...");
+        MuscleGroup hamstrings = new MuscleGroup("Hamstrings", "In human anatomy...");
+        MuscleGroup calves = new MuscleGroup("Calves", "Your calf muscle sits...");
+        MuscleGroup heart = new MuscleGroup("Heart", "Cardiac muscle...");
+
+        // Save MuscleGroup entities
+        muscleGroupRepository.saveAll(List.of(
+                deltoids, biceps, triceps, pectorals, trapezius, abdominals, wristFlexors,
+                quadriceps, lats, hamstrings, calves, heart
+        ));
+
+        // Create Workout entities
+        Workout barbellPress = new Workout("Barbell press", 216);
+        Workout seatedOverheadPress = new Workout("Seated overhead press", 216);
+        Workout machineLateralRaises = new Workout("Machine lateral raises", 272);
+        Workout rowing = new Workout("Rowing", 840);
+        Workout alternateDumbellCurls = new Workout("Alternate dumbell curls", 323);
+        Workout olympicBarbellLift = new Workout("Olympic barbell lift", 643);
+        Workout barbellRows = new Workout("Standing barbell rows", 213);
+        Workout benchPress = new Workout("Barbell bench press", 459);
+        Workout jogging = new Workout("Jogging", 603);
+        Workout cycling = new Workout("Cycling", 450);
+        Workout abdominalCrunches = new Workout("Abdominal crunches", 396);
+
+        // Save Workout entities
+        workoutRepository.saveAll(List.of(
+                barbellPress, seatedOverheadPress, machineLateralRaises, rowing, alternateDumbellCurls,
+                olympicBarbellLift, barbellRows, benchPress, jogging, cycling, abdominalCrunches
+        ));
+
+        // Establish relationships by adding workout IDs to muscle groups and vice versa
+        deltoids.addWorkout(barbellPress);
+        barbellPress.addMuscleGroup(deltoids);
+
+        deltoids.addWorkout(seatedOverheadPress);
+        seatedOverheadPress.addMuscleGroup(deltoids);
+
+        deltoids.addWorkout(machineLateralRaises);
+        machineLateralRaises.addMuscleGroup(deltoids);
+
+        deltoids.addWorkout(benchPress);
+        benchPress.addMuscleGroup(deltoids);
+
+        triceps.addWorkout(barbellPress);
+        barbellPress.addMuscleGroup(triceps);
+
+        triceps.addWorkout(seatedOverheadPress);
+        seatedOverheadPress.addMuscleGroup(triceps);
+
+        triceps.addWorkout(machineLateralRaises);
+        machineLateralRaises.addMuscleGroup(triceps);
+
+        triceps.addWorkout(benchPress);
+        benchPress.addMuscleGroup(triceps);
+
+        biceps.addWorkout(rowing);
+        rowing.addMuscleGroup(biceps);
+
+        biceps.addWorkout(alternateDumbellCurls);
+        alternateDumbellCurls.addMuscleGroup(biceps);
+
+        biceps.addWorkout(barbellRows);
+        barbellRows.addMuscleGroup(biceps);
+
+        wristFlexors.addWorkout(rowing);
+        rowing.addMuscleGroup(wristFlexors);
+
+        wristFlexors.addWorkout(alternateDumbellCurls);
+        alternateDumbellCurls.addMuscleGroup(wristFlexors);
+
+        wristFlexors.addWorkout(barbellRows);
+        barbellRows.addMuscleGroup(wristFlexors);
+
+        wristFlexors.addWorkout(barbellPress);
+        barbellPress.addMuscleGroup(wristFlexors);
+
+        wristFlexors.addWorkout(benchPress);
+        benchPress.addMuscleGroup(wristFlexors);
+
+        lats.addWorkout(rowing);
+        rowing.addMuscleGroup(lats);
+
+        abdominals.addWorkout(abdominalCrunches);
+        abdominalCrunches.addMuscleGroup(abdominals);
+
+        trapezius.addWorkout(barbellRows);
+        barbellRows.addMuscleGroup(trapezius);
+
+        quadriceps.addWorkout(rowing);
+        rowing.addMuscleGroup(quadriceps);
+
+        quadriceps.addWorkout(olympicBarbellLift);
+        olympicBarbellLift.addMuscleGroup(quadriceps);
+
+        quadriceps.addWorkout(cycling);
+        cycling.addMuscleGroup(quadriceps);
+
+        hamstrings.addWorkout(cycling);
+        cycling.addMuscleGroup(hamstrings);
+
+        calves.addWorkout(jogging);
+        jogging.addMuscleGroup(calves);
+
+        calves.addWorkout(cycling);
+        cycling.addMuscleGroup(calves);
+
+        heart.addWorkout(jogging);
+        jogging.addMuscleGroup(heart);
+
+        heart.addWorkout(rowing);
+        rowing.addMuscleGroup(heart);
+
+        heart.addWorkout(cycling);
+        cycling.addMuscleGroup(heart);
+
+        // Save the muscle groups again to persist the relationships
+        muscleGroupRepository.saveAll(List.of(
+                deltoids, biceps, triceps, pectorals, trapezius, abdominals, wristFlexors,
+                quadriceps, lats, hamstrings, calves, heart
+        ));
+        workoutRepository.saveAll(List.of(
+                barbellPress, seatedOverheadPress, machineLateralRaises, rowing, alternateDumbellCurls,
+                olympicBarbellLift, barbellRows, benchPress, jogging, cycling, abdominalCrunches
+        ));
+    }*/
 
     private final RecipeRepository recipeRepository;
 
@@ -70,6 +227,18 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         MuscleGroup calves = new MuscleGroup("Calves", "Your calf muscle sits in the back of your lower leg. It starts below your knee and extends to your ankle. It allows you to walk, run, jump and flex your foot. It also helps you stand up straight. Strains and cramps are the most common conditions that affect your calf muscle.");
         MuscleGroup heart = new MuscleGroup("Heart", "Cardiac muscle (also called heart muscle or myocardium) is one of three types of vertebrate muscle tissues, with the other two being skeletal muscle and smooth muscle. It is an involuntary, striated muscle that constitutes the main tissue of the wall of the heart. The cardiac muscle (myocardium) forms a thick middle layer between the outer layer of the heart wall (the pericardium) and the inner layer (the endocardium), with blood supplied via the coronary circulation. It is composed of individual cardiac muscle cells joined by intercalated discs, and encased by collagen fibers and other substances that form the extracellular matrix.");
 
+        muscleGroupRepository.save(deltoids);
+        muscleGroupRepository.save(biceps);
+        muscleGroupRepository.save(triceps);
+        muscleGroupRepository.save(trapezius);
+        muscleGroupRepository.save(pectorals);
+        muscleGroupRepository.save(abdominals);
+        muscleGroupRepository.save(wristFlexors);
+        muscleGroupRepository.save(quadriceps);
+        muscleGroupRepository.save(lats);
+        muscleGroupRepository.save(hamstrings);
+        muscleGroupRepository.save(calves);
+        muscleGroupRepository.save(heart);
 
         Workout barbellPress = new Workout("Barbell press", 216);
         Workout seatedOverheadPress = new Workout("Seated overhead press", 216);
@@ -83,6 +252,17 @@ public class CommandLineRunnerAtStartup implements CommandLineRunner {
         Workout cycling = new Workout("Cycling", 450);
         Workout abdominalCrunches = new Workout("Abdominal crunches", 396);
 
+        workoutRepository.save(barbellPress);
+        workoutRepository.save(seatedOverheadPress);
+        workoutRepository.save(machineLateralRaises);
+        workoutRepository.save(rowing);
+        workoutRepository.save(alternateDumbellCurls);
+        workoutRepository.save(olympicBarbellLift);
+        workoutRepository.save(barbellRows);
+        workoutRepository.save(benchPress);
+        workoutRepository.save(jogging);
+        workoutRepository.save(cycling);
+        workoutRepository.save(abdominalCrunches);
 
         RecipeIngredient chickenThighs = new RecipeIngredient("skinless boneless chicken thighs, cut in half", "3 pieces");
         RecipeIngredient rapeseedOil = new RecipeIngredient("rapeseed oil", "2 tbsp");

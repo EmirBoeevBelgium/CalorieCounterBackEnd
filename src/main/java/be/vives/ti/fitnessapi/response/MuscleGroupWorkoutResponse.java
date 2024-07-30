@@ -5,7 +5,7 @@ import be.vives.ti.fitnessapi.domain.Workout;
 import java.util.stream.Collectors;
 
 public class MuscleGroupWorkoutResponse {
-    private Long id;
+    private String id;
 
     private String workoutName;
 
@@ -16,7 +16,7 @@ public class MuscleGroupWorkoutResponse {
         this.workoutName = workout.getWorkoutName();
         this.burnedKiloCaloriesPHour = workout.getBurnedKiloCaloriesPHour();
     }
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

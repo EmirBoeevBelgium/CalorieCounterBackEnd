@@ -17,7 +17,7 @@ public class WorkoutRequest {
 
     @NotNull
     @NotEmpty
-    private List<Long> muscleGroupIds;
+    private List<String> muscleGroupIds;
 
     public String getWorkoutName() {
         return workoutName;
@@ -35,11 +35,11 @@ public class WorkoutRequest {
         this.burnedKiloCaloriesPHour = burnedKiloCaloriesPHour;
     }
 
-    public List<Long> getMuscleGroupIds() {
+    public List<String> getMuscleGroupIds() {
         return muscleGroupIds;
     }
 
-    public void setMuscleGroupIds(List<Long> muscleGroupIds) {
+    public void setMuscleGroupIds(List<String> muscleGroupIds) {
         this.muscleGroupIds = muscleGroupIds;
     }
 }

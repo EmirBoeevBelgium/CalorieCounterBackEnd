@@ -31,7 +31,7 @@ public class MuscleGroupController {
 
 
     @PutMapping("workout")
-    public ResponseEntity<String> removeWorkoutFromMuscleGroup(@RequestParam("musclegroupid") Long muscleGroupId, @RequestParam("workoutid") Long workoutId) {
+    public ResponseEntity<String> removeWorkoutFromMuscleGroup(@RequestParam("musclegroupid") String muscleGroupId, @RequestParam("workoutid") String workoutId) {
         return muscleGroupService.removeWorkout(muscleGroupId, workoutId);
     }
 }

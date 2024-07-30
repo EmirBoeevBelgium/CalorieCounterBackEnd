@@ -36,7 +36,7 @@ public class MuscleGroupService {
         return ResponseEntity.notFound().build();
     }
 
-    public ResponseEntity<String> removeWorkout(Long muscleGroupId, Long workoutId) {
+    public ResponseEntity<String> removeWorkout(String muscleGroupId, String workoutId) {
         Optional<MuscleGroup> foundMuscleGroup = muscleGroupRepository.findById(muscleGroupId);
 
         if(foundMuscleGroup.isPresent()) {

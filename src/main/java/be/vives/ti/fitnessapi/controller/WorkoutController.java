@@ -40,7 +40,7 @@ public class WorkoutController {
     }
 
     @DeleteMapping("workout")
-    public ResponseEntity<String> deleteById(@RequestParam("id") Long id) {
+    public ResponseEntity<String> deleteById(@RequestParam("id") String id) {
         return workoutService.deleteById(id);
     }
 
@@ -52,12 +52,12 @@ public class WorkoutController {
     }
 
     @PutMapping("workout")
-    public ResponseEntity<String> updateWorkout(@RequestParam("id") Long id, @Valid @RequestBody WorkoutRequest updatedWorkout) {
+    public ResponseEntity<String> updateWorkout(@RequestParam("id") String id, @Valid @RequestBody WorkoutRequest updatedWorkout) {
         return workoutService.updateWorkout(id, updatedWorkout);
     }
 
     @PutMapping("musclegroup")
-    public ResponseEntity<String> removeMuscleGroup(@RequestParam("workoutid") Long workoutId, @RequestParam("musclegroupid") Long muscleGroupId) {
+    public ResponseEntity<String> removeMuscleGroup(@RequestParam("workoutid") String workoutId, @RequestParam("musclegroupid") String muscleGroupId) {
         return workoutService.removeMuscleGroup(workoutId, muscleGroupId);
     }
 }

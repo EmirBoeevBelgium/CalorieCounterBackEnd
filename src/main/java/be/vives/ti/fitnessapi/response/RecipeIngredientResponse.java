@@ -1,7 +1,7 @@
 package be.vives.ti.fitnessapi.response;
 
 import be.vives.ti.fitnessapi.domain.RecipeIngredient;
-import jakarta.persistence.Column;
+//import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 
 public class RecipeIngredientResponse {

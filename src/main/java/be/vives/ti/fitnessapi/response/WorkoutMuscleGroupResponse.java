@@ -5,7 +5,7 @@ import be.vives.ti.fitnessapi.domain.MuscleGroup;
 import java.util.stream.Collectors;
 
 public class WorkoutMuscleGroupResponse {
-    private Long id;
+    private String id;
 
     private String muscleGroupName;
 
@@ -16,7 +16,7 @@ public class WorkoutMuscleGroupResponse {
         this.muscleGroupName = muscleGroup.getMuscleGroupName();
         this.muscleGroupDescription = muscleGroup.getMuscleGroupDescription();
     }
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

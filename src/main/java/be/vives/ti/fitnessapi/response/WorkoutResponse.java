@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class WorkoutResponse {
-    private Long id;
+    private String id;
 
     private String workoutName;
 
@@ -22,7 +22,7 @@ public class WorkoutResponse {
         this.muscleGroups = workout.getWorkoutMuscleGroups().stream().map(WorkoutMuscleGroupResponse::new).collect(Collectors.toList());
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

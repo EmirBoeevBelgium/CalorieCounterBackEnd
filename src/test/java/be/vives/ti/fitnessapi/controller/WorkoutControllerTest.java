@@ -174,13 +174,13 @@ class WorkoutControllerTest {
     @Test
     void deleteById() throws Exception {
 
-        when(workoutService.deleteById(1L)).thenReturn(ResponseEntity.ok("Workout 'Bench press' succesfully deleted."));
-        mockMvc.perform(delete(apiUrl + "/workout").param("id", String.valueOf(1L)))
+        when(workoutService.deleteById("1")).thenReturn(ResponseEntity.ok("Workout 'Bench press' succesfully deleted."));
+        mockMvc.perform(delete(apiUrl + "/workout").param("id", String.valueOf(1)))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        when(workoutService.deleteById(1L)).thenReturn(ResponseEntity.notFound().build());
-        mockMvc.perform(delete(apiUrl + "/workout").param("id", String.valueOf(1L)))
+        when(workoutService.deleteById("1")).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(delete(apiUrl + "/workout").param("id", String.valueOf(1)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -188,8 +188,8 @@ class WorkoutControllerTest {
     @Test
     void deleteByIdNotFound() throws Exception {
 
-        when(workoutService.deleteById(100L)).thenReturn(ResponseEntity.notFound().build());
-        mockMvc.perform(delete(apiUrl + "/workout").param("id", String.valueOf(100L)))
+        when(workoutService.deleteById("100")).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(delete(apiUrl + "/workout").param("id", String.valueOf(100)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -200,8 +200,8 @@ class WorkoutControllerTest {
         WorkoutRequest testWorkout = new WorkoutRequest();
         testWorkout.setWorkoutName("test workout");
         testWorkout.setBurnedKiloCaloriesPHour(100);
-        List<Long> muscleGroupIds = new ArrayList<>();
-        muscleGroupIds.add(1L);
+        List<String> muscleGroupIds = new ArrayList<>();
+        muscleGroupIds.add("1");
         testWorkout.setMuscleGroupIds(muscleGroupIds);
 
 
@@ -220,8 +220,8 @@ class WorkoutControllerTest {
         WorkoutRequest testWorkout = new WorkoutRequest();
         testWorkout.setWorkoutName("");
         testWorkout.setBurnedKiloCaloriesPHour(100);
-        List<Long> muscleGroupIds = new ArrayList<>();
-        muscleGroupIds.add(1L);
+        List<String> muscleGroupIds = new ArrayList<>();
+        muscleGroupIds.add("1");
         testWorkout.setMuscleGroupIds(muscleGroupIds);
 
         when(workoutService.saveWorkout(any(WorkoutRequest.class))).thenReturn(ResponseEntity.badRequest().build());
@@ -235,8 +235,8 @@ class WorkoutControllerTest {
     void saveWorkoutNullNameValidationError() throws Exception {
         WorkoutRequest testWorkout = new WorkoutRequest();
         testWorkout.setBurnedKiloCaloriesPHour(100);
-        List<Long> muscleGroupIds = new ArrayList<>();
-        muscleGroupIds.add(1L);
+        List<String> muscleGroupIds = new ArrayList<>();
+        muscleGroupIds.add("1");
         testWorkout.setMuscleGroupIds(muscleGroupIds);
 
         when(workoutService.saveWorkout(any(WorkoutRequest.class))).thenReturn(ResponseEntity.badRequest().build());
@@ -251,8 +251,8 @@ class WorkoutControllerTest {
         WorkoutRequest testWorkout = new WorkoutRequest();
         testWorkout.setWorkoutName("test workout");
         testWorkout.setBurnedKiloCaloriesPHour(-100);
-        List<Long> muscleGroupIds = new ArrayList<>();
-        muscleGroupIds.add(1L);
+        List<String> muscleGroupIds = new ArrayList<>();
+        muscleGroupIds.add("1");
         testWorkout.setMuscleGroupIds(muscleGroupIds);
 
 
@@ -281,13 +281,13 @@ class WorkoutControllerTest {
         WorkoutRequest testWorkout = new WorkoutRequest();
         testWorkout.setWorkoutName("test workout");
         testWorkout.setBurnedKiloCaloriesPHour(100);
-        List<Long> muscleGroupIds = new ArrayList<>();
-        muscleGroupIds.add(1L);
+        List<String> muscleGroupIds = new ArrayList<>();
+        muscleGroupIds.add("1");
         testWorkout.setMuscleGroupIds(muscleGroupIds);
 
 
-        when(workoutService.updateWorkout(1L, testWorkout)).thenReturn(ResponseEntity.ok("Workout successfully updated."));
-        mockMvc.perform(put(apiUrl + "/workout").param("id", String.valueOf(1L))
+        when(workoutService.updateWorkout("1", testWorkout)).thenReturn(ResponseEntity.ok("Workout successfully updated."));
+        mockMvc.perform(put(apiUrl + "/workout").param("id", String.valueOf(1))
                                 .content(objectMapper.writeValueAsString(testWorkout))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -299,13 +299,13 @@ class WorkoutControllerTest {
         WorkoutRequest testWorkout = new WorkoutRequest();
         testWorkout.setWorkoutName("test workout");
         testWorkout.setBurnedKiloCaloriesPHour(100);
-        List<Long> muscleGroupIds = new ArrayList<>();
-        muscleGroupIds.add(1L);
+        List<String> muscleGroupIds = new ArrayList<>();
+        muscleGroupIds.add("1");
         testWorkout.setMuscleGroupIds(muscleGroupIds);
 
 
-        when(workoutService.updateWorkout(100L, testWorkout)).thenReturn(ResponseEntity.notFound().build());
-        mockMvc.perform(put(apiUrl + "/workout").param("id", String.valueOf(100L))
+        when(workoutService.updateWorkout("100", testWorkout)).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(put(apiUrl + "/workout").param("id", String.valueOf(100))
                         .content(objectMapper.writeValueAsString(testWorkout))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -317,13 +317,13 @@ class WorkoutControllerTest {
         WorkoutRequest testWorkout = new WorkoutRequest();
         testWorkout.setWorkoutName("");
         testWorkout.setBurnedKiloCaloriesPHour(100);
-        List<Long> muscleGroupIds = new ArrayList<>();
-        muscleGroupIds.add(1L);
+        List<String> muscleGroupIds = new ArrayList<>();
+        muscleGroupIds.add("1");
         testWorkout.setMuscleGroupIds(muscleGroupIds);
 
 
-        when(workoutService.updateWorkout(1L, testWorkout)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/workout").param("id", String.valueOf(1L))
+        when(workoutService.updateWorkout("1", testWorkout)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/workout").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testWorkout))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -334,13 +334,13 @@ class WorkoutControllerTest {
     void updateWorkoutNullWorkoutNameValidationError() throws Exception {
         WorkoutRequest testWorkout = new WorkoutRequest();
         testWorkout.setBurnedKiloCaloriesPHour(100);
-        List<Long> muscleGroupIds = new ArrayList<>();
-        muscleGroupIds.add(1L);
+        List<String> muscleGroupIds = new ArrayList<>();
+        muscleGroupIds.add("1");
         testWorkout.setMuscleGroupIds(muscleGroupIds);
 
 
-        when(workoutService.updateWorkout(1L, testWorkout)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/workout").param("id", String.valueOf(1L))
+        when(workoutService.updateWorkout("1", testWorkout)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/workout").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testWorkout))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -352,13 +352,13 @@ class WorkoutControllerTest {
         WorkoutRequest testWorkout = new WorkoutRequest();
         testWorkout.setWorkoutName("test workout");
         testWorkout.setBurnedKiloCaloriesPHour(-100);
-        List<Long> muscleGroupIds = new ArrayList<>();
-        muscleGroupIds.add(1L);
+        List<String> muscleGroupIds = new ArrayList<>();
+        muscleGroupIds.add("1");
         testWorkout.setMuscleGroupIds(muscleGroupIds);
 
 
-        when(workoutService.updateWorkout(1L, testWorkout)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/workout").param("id", String.valueOf(1L))
+        when(workoutService.updateWorkout("1", testWorkout)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/workout").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testWorkout))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -369,7 +369,7 @@ class WorkoutControllerTest {
     void removeMuscleGroup() throws Exception {
 
         MuscleGroup muscleGroup = workoutMuscleGroups.get(1);
-        when(workoutService.removeMuscleGroup(1L, 2L))
+        when(workoutService.removeMuscleGroup("1", "2"))
                 .thenReturn(ResponseEntity.ok("Muscle group '"+ muscleGroup.getMuscleGroupName() + "' succesfully removed from workout."));
         mockMvc.perform(put(apiUrl + "/musclegroup").param("workoutid", String.valueOf(1L)).param("musclegroupid", String.valueOf(2L))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -380,9 +380,9 @@ class WorkoutControllerTest {
     @Test
     void removeMuscleGroupButWorkoutNotFound() throws Exception {
 
-        when(workoutService.removeMuscleGroup(200L, 1L))
+        when(workoutService.removeMuscleGroup("200", "1"))
                 .thenReturn(ResponseEntity.notFound().build());
-        mockMvc.perform(put(apiUrl + "/musclegroup").param("workoutid", String.valueOf(200L)).param("musclegroupid", String.valueOf(2L))
+        mockMvc.perform(put(apiUrl + "/musclegroup").param("workoutid", String.valueOf(200)).param("musclegroupid", String.valueOf(2))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
@@ -391,9 +391,9 @@ class WorkoutControllerTest {
     @Test
     void removeMuscleGroupNotFound() throws Exception {
 
-        when(workoutService.removeMuscleGroup(1L, 5L))
+        when(workoutService.removeMuscleGroup("1", "5"))
                 .thenReturn(ResponseEntity.notFound().build());
-        mockMvc.perform(put(apiUrl + "/musclegroup").param("workoutid", String.valueOf(1L)).param("musclegroupid", String.valueOf(2L))
+        mockMvc.perform(put(apiUrl + "/musclegroup").param("workoutid", String.valueOf(1)).param("musclegroupid", String.valueOf(2))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());

@@ -214,13 +214,13 @@ class RecipeControllerTest {
 
     @Test
     void deleteById() throws Exception {
-        when(recipeService.deleteById(1L)).thenReturn(ResponseEntity.ok("Recipe 'Chicken and rice' succesfully deleted."));
-        mockMvc.perform(delete(apiUrl + "/recipe").param("id", String.valueOf(1L)))
+        when(recipeService.deleteById("1")).thenReturn(ResponseEntity.ok("Recipe 'Chicken and rice' succesfully deleted."));
+        mockMvc.perform(delete(apiUrl + "/recipe").param("id", String.valueOf(1)))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        when(recipeService.deleteById(1L)).thenReturn(ResponseEntity.notFound().build());
-        mockMvc.perform(delete(apiUrl + "/recipe").param("id", String.valueOf(1L)))
+        when(recipeService.deleteById("1")).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(delete(apiUrl + "/recipe").param("id", String.valueOf(1)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
@@ -228,8 +228,8 @@ class RecipeControllerTest {
 
     @Test
     void deleteByIdNotFound() throws Exception {
-        when(recipeService.deleteById(15L)).thenReturn(ResponseEntity.notFound().build());
-        mockMvc.perform(delete(apiUrl + "/recipe").param("id", String.valueOf(15L)))
+        when(recipeService.deleteById("15")).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(delete(apiUrl + "/recipe").param("id", String.valueOf(15)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
@@ -653,7 +653,7 @@ class RecipeControllerTest {
 
     @Test
     void updateRecipe() throws Exception {
-        Long recipeId = 3L;
+        String recipeId = "3";
         RecipeIngredient testIngr = new RecipeIngredient("test ingredient", "1 tblspn");
         RecipeInstruction testInstr = new RecipeInstruction("test ingredient", 1);
 
@@ -702,7 +702,7 @@ class RecipeControllerTest {
     @Test
     void updateRecipeNotFound() throws Exception {
 
-        when(recipeService.findById(5L)).thenReturn(ResponseEntity.notFound().build());
+        when(recipeService.findById("5")).thenReturn(ResponseEntity.notFound().build());
 
         verifyNoMoreInteractions(recipeService);
 
@@ -759,9 +759,9 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
 
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -795,8 +795,8 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -822,8 +822,8 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -849,8 +849,8 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -882,8 +882,8 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -915,8 +915,8 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -948,8 +948,8 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -981,8 +981,8 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -1018,8 +1018,8 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -1056,8 +1056,8 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -1090,8 +1090,8 @@ class RecipeControllerTest {
         testRecipeReq.setTotalKiloCalories(-200);
 
 
-        when(recipeService.updateRecipe(1L, testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
-        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf(1L))
+        when(recipeService.updateRecipe("1", testRecipeReq)).thenReturn(ResponseEntity.badRequest().build());
+        mockMvc.perform(put(apiUrl + "/recipe").param("id", String.valueOf("1"))
                         .content(objectMapper.writeValueAsString(testRecipeReq))
                         .accept(MediaType.APPLICATION_JSON_VALUE)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))

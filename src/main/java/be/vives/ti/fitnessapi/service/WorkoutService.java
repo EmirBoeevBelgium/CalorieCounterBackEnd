@@ -8,11 +8,12 @@ import be.vives.ti.fitnessapi.repository.WorkoutRepository;
 import be.vives.ti.fitnessapi.request.WorkoutRequest;
 import be.vives.ti.fitnessapi.response.RecipeResponse;
 import be.vives.ti.fitnessapi.response.WorkoutResponse;
-import jakarta.transaction.Transactional;
-import org.hibernate.jdbc.Work;
+//import jakarta.transaction.Transactional;
+//import org.hibernate.jdbc.Work;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -32,7 +33,7 @@ public class WorkoutService {
     }
 
 
-    public ResponseEntity<WorkoutResponse> findById(Long id) {
+    public ResponseEntity<WorkoutResponse> findById(String id) {
         Optional<Workout> workout = workoutRepository.findById(id);
         if(workout.isPresent()) {
             WorkoutResponse response = new WorkoutResponse(workout.get());
@@ -61,7 +62,7 @@ public class WorkoutService {
     }
 
     @Transactional
-    public ResponseEntity<String> deleteById(Long id) {
+    public ResponseEntity<String> deleteById(String id) {
         Optional<Workout> workout = workoutRepository.findById(id);
 
         if (workout.isPresent()) {
@@ -90,8 +91,8 @@ public class WorkoutService {
         );
 
         List<MuscleGroup> muscleGroups = new ArrayList<>();
-        List<Long> muscleGroupIds = savedWorkout.getMuscleGroupIds();
-        for (Long muscleGroupId : muscleGroupIds) {
+        List<String> muscleGroupIds = savedWorkout.getMuscleGroupIds();
+        for (String muscleGroupId : muscleGroupIds) {
             Optional<MuscleGroup> muscleGroup = muscleGroupRepository.findById(muscleGroupId);
             if(muscleGroup.isPresent()) {
                 muscleGroups.add(muscleGroup.get());
@@ -118,7 +119,7 @@ public class WorkoutService {
     }
 
     @Transactional
-    public ResponseEntity<String> updateWorkout(Long id, WorkoutRequest updatedWorkout) {
+    public ResponseEntity<String> updateWorkout(String id, WorkoutRequest updatedWorkout) {
         Optional<Workout> foundWorkout = workoutRepository.findById(id);
 
         if (foundWorkout.isPresent()) {
@@ -127,9 +128,9 @@ public class WorkoutService {
             myUpdatedWorkout.setBurnedKiloCaloriesPHour(updatedWorkout.getBurnedKiloCaloriesPHour());
 
             List<MuscleGroup> muscleGroups = new ArrayList<>();
-            List<Long> muscleGroupIds = updatedWorkout.getMuscleGroupIds();
+            List<String> muscleGroupIds = updatedWorkout.getMuscleGroupIds();
 
-            for (Long muscleGroupId : muscleGroupIds) {
+            for (String muscleGroupId : muscleGroupIds) {
                 Optional<MuscleGroup> muscleGroup = muscleGroupRepository.findById(muscleGroupId);
                 if (muscleGroup.isPresent()) {
                     muscleGroups.add(muscleGroup.get());
@@ -159,7 +160,7 @@ public class WorkoutService {
     }
 
 
-    public ResponseEntity<String> removeMuscleGroup(Long workoutId, Long muscleGroupId) {
+    public ResponseEntity<String> removeMuscleGroup(String workoutId, String muscleGroupId) {
         Optional<Workout> foundWorkout = workoutRepository.findById(workoutId);
 
         if(foundWorkout.isPresent()) {

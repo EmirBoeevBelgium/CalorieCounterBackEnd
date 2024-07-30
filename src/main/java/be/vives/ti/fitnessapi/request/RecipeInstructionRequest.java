@@ -1,6 +1,6 @@
 package be.vives.ti.fitnessapi.request;
 
-import jakarta.persistence.Column;
+//import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 public class RecipeInstructionRequest {
     @NotNull
     @NotEmpty
-    @Column(length = 1000)
+    //@Column(length = 1000)
     private String instruction;
     @NotNull
     @Min(1)

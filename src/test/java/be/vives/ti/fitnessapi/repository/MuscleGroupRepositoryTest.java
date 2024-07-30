@@ -2,17 +2,18 @@ package be.vives.ti.fitnessapi.repository;
 
 import be.vives.ti.fitnessapi.domain.MuscleGroup;
 import be.vives.ti.fitnessapi.domain.Workout;
-import org.hibernate.jdbc.Work;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@RunWith(SpringRunner.class)
+@DataMongoTest
 class MuscleGroupRepositoryTest {
 
     @Autowired
@@ -21,10 +22,20 @@ class MuscleGroupRepositoryTest {
     @Autowired
     private WorkoutRepository workoutRepository;
 
+    @BeforeEach
+    public void setUp() throws Exception {
+        muscleGroupRepository.deleteAll();
+        workoutRepository.deleteAll();
+    }
+
     @Test
     public void simpleCrud() {
         MuscleGroup pectorals = new MuscleGroup("Pecs", "Chest muscles.");
+        pectorals = muscleGroupRepository.save(pectorals);
         Workout benchPress = new Workout("Bench press", 200);
+
+        benchPress = workoutRepository.save(benchPress);
+
         benchPress.addMuscleGroup(pectorals);
         pectorals.addWorkout(benchPress);
 
@@ -43,11 +54,12 @@ class MuscleGroupRepositoryTest {
         pectorals.setMuscleGroupDescription("Neck muscles.");
         pectorals.removeWorkoutById(benchPress.getId());
         Workout barbellPress = new Workout("Barbell overhead press", 300);
+        barbellPress = workoutRepository.save(barbellPress);
         pectorals.addWorkout(barbellPress);
         barbellPress.addMuscleGroup(pectorals);
 
-        barbellPress = workoutRepository.save(barbellPress);
         pectorals = muscleGroupRepository.save(pectorals);
+        barbellPress = workoutRepository.save(barbellPress);
 
         assertThat(pectorals.getMuscleGroupName()).isEqualTo("Delt");
         assertThat(pectorals.getMuscleGroupDescription()).isEqualTo("Neck muscles.");
@@ -56,6 +68,8 @@ class MuscleGroupRepositoryTest {
 
         MuscleGroup biceps = new MuscleGroup("Biceps", "Frontal arm muscles.");
         Workout dumbellCurls = new Workout("Dumbell curls", 200);
+        biceps = muscleGroupRepository.save(biceps);
+        dumbellCurls = workoutRepository.save(dumbellCurls);
         biceps.addWorkout(dumbellCurls);
         dumbellCurls.addMuscleGroup(biceps);
         muscleGroupRepository.save(biceps);
@@ -77,6 +91,8 @@ class MuscleGroupRepositoryTest {
     void findByMuscleGroupNameIgnoreCase() {
         MuscleGroup biceps = new MuscleGroup("Biceps", "Arm muscles");
         Workout dumbellCurls = new Workout("Dumbell curls", 100);
+        muscleGroupRepository.save(biceps);
+        workoutRepository.save(dumbellCurls);
         biceps.addWorkout(dumbellCurls);
         dumbellCurls.addMuscleGroup(biceps);
         muscleGroupRepository.save(biceps);
@@ -84,6 +100,8 @@ class MuscleGroupRepositoryTest {
 
         MuscleGroup pecs = new MuscleGroup("Pecs", "Chest muscles");
         Workout benchpress = new Workout("Bench press", 200);
+        muscleGroupRepository.save(pecs);
+        workoutRepository.save(benchpress);
         pecs.addWorkout(benchpress);
         benchpress.addMuscleGroup(pecs);
         muscleGroupRepository.save(pecs);
@@ -91,6 +109,8 @@ class MuscleGroupRepositoryTest {
 
         MuscleGroup quads = new MuscleGroup("Quads", "Hind muscles");
         Workout squats = new Workout("Squats", 300);
+        muscleGroupRepository.save(quads);
+        workoutRepository.save(squats);
         quads.addWorkout(squats);
         squats.addMuscleGroup(quads);
         muscleGroupRepository.save(quads);

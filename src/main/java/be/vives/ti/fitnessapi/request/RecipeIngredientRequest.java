@@ -1,6 +1,6 @@
 package be.vives.ti.fitnessapi.request;
 
-import jakarta.persistence.Column;
+//import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -11,7 +11,7 @@ public class RecipeIngredientRequest {
 
     @NotNull
     @NotEmpty
-    @Column(length = 10)
+    //@Column(length = 10)
     private String ingredientAmount;
 
     public String getIngredientName() {

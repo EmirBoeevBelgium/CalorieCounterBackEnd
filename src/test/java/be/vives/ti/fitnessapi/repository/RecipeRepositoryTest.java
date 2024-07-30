@@ -2,9 +2,13 @@ package be.vives.ti.fitnessapi.repository;
 
 import be.vives.ti.fitnessapi.domain.*;
 import be.vives.ti.fitnessapi.response.RecipeResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +16,17 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest
+@RunWith(SpringRunner.class)
+@DataMongoTest
 class RecipeRepositoryTest {
 
     @Autowired
     private RecipeRepository recipeRepository;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+        recipeRepository.deleteAll();
+    }
     @Test
     public void simpleCrud() {
         List<RecipeIngredient> baconIngredients = new ArrayList<>();
@@ -182,7 +192,7 @@ class RecipeRepositoryTest {
         List<RecipeIngredient> recipeIngredientsTest = new ArrayList<>();
         recipeIngredientsTest.add(new RecipeIngredient("test ingredient 1", "1 piece"));
 
-        recipeRepository.save(new Recipe("Bacon", recipeInstructionsTest, recipeIngredientsTest, 200));
+        Recipe toBeDeleted = recipeRepository.save(new Recipe("Bacon", recipeInstructionsTest, recipeIngredientsTest, 200));
         recipeRepository.save(new Recipe("Mac & cheese", recipeInstructionsTest, recipeIngredientsTest, 300));
         recipeRepository.save(new Recipe("Lasagna", recipeInstructionsTest, recipeIngredientsTest, 400));
 
@@ -191,8 +201,9 @@ class RecipeRepositoryTest {
         assertThat(recipeRepository.findAll().get(1).getRecipeName()).isEqualTo("Mac & cheese");
         assertThat(recipeRepository.findAll().get(2).getRecipeName()).isEqualTo("Lasagna");
 
+        System.out.println(recipeRepository.findAll());
 
-        recipeRepository.deleteById(1L);
+        recipeRepository.deleteById(toBeDeleted.getId());
 
         assertThat(recipeRepository.findAll().size()).isEqualTo(2);
         assertThat(recipeRepository.findAll().get(0).getRecipeName()).isEqualTo("Mac & cheese");

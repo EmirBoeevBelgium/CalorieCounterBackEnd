@@ -136,13 +136,13 @@ class MuscleGroupControllerTest {
     void removeWorkoutFromMuscleGroup() throws Exception {
 
 
-        when(muscleGroupService.removeWorkout(1L, 1L)).thenReturn(ResponseEntity.ok("Workout 'Preacher curls' succesfully removed from muscle group."));
-        mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf(1L)).param("workoutid", String.valueOf(1L)))
+        when(muscleGroupService.removeWorkout("1", "1")).thenReturn(ResponseEntity.ok("Workout 'Preacher curls' succesfully removed from muscle group."));
+        mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf(1)).param("workoutid", String.valueOf(1)))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-        when(muscleGroupService.removeWorkout(1L, 1L)).thenReturn(ResponseEntity.notFound().build());
-        mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf(1L)).param("workoutid", String.valueOf(1L)))
+        when(muscleGroupService.removeWorkout("1", "1")).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf(1)).param("workoutid", String.valueOf(1)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
@@ -151,8 +151,8 @@ class MuscleGroupControllerTest {
     @Test
     void removeWorkoutFromMuscleGroupButWorkoutNotFound() throws Exception {
 
-        when(muscleGroupService.removeWorkout(1L, 2L)).thenReturn(ResponseEntity.notFound().build());
-        mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf(1L)).param("workoutid", String.valueOf(2L)))
+        when(muscleGroupService.removeWorkout("1", "2")).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf(1)).param("workoutid", String.valueOf(2)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
@@ -162,8 +162,8 @@ class MuscleGroupControllerTest {
     @Test
     void removeWorkoutFromMuscleGroupButMuscleGroupNotFound() throws Exception {
 
-        when(muscleGroupService.removeWorkout(100L, 1L)).thenReturn(ResponseEntity.notFound().build());
-        mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf(100L)).param("workoutid", String.valueOf(1L)))
+        when(muscleGroupService.removeWorkout("100", "1")).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(put(apiUrl + "/workout").param("musclegroupid", String.valueOf("100")).param("workoutid", String.valueOf("1")))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 

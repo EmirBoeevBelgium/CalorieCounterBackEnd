@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RecipeResponse {
-    private Long id;
+    private String id;
 
     private String recipeName;
 
@@ -23,7 +23,7 @@ public class RecipeResponse {
         this.recipeIngredients = recipe.getRecipeIngredients().stream().map(RecipeIngredientResponse::new).collect(Collectors.toList());
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

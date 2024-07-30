@@ -8,10 +8,11 @@ import be.vives.ti.fitnessapi.request.RecipeIngredientRequest;
 import be.vives.ti.fitnessapi.request.RecipeInstructionRequest;
 import be.vives.ti.fitnessapi.request.RecipeRequest;
 import be.vives.ti.fitnessapi.response.RecipeResponse;
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.swing.text.html.Option;
@@ -35,7 +36,7 @@ public class RecipeService {
     }
 
 
-    public ResponseEntity<RecipeResponse> findById(Long id) {
+    public ResponseEntity<RecipeResponse> findById(String id) {
         Optional<Recipe> recipe = recipeRepository.findById(id);
         if(recipe.isPresent()) {
             RecipeResponse response = new RecipeResponse(recipe.get());
@@ -59,7 +60,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public ResponseEntity<String> deleteById(Long id) {
+    public ResponseEntity<String> deleteById(String id) {
         Optional<Recipe> recipe = recipeRepository.findById(id);
 
         if(recipe.isPresent()) {
@@ -94,7 +95,7 @@ public class RecipeService {
         return ResponseEntity.created(location).build();
     }
 
-    public ResponseEntity<String> updateRecipe(Long id, RecipeRequest updatedRecipe) {
+    public ResponseEntity<String> updateRecipe(String id, RecipeRequest updatedRecipe) {
         Optional<Recipe> foundRecipe = recipeRepository.findById(id);
 
         if (foundRecipe.isPresent()) {
