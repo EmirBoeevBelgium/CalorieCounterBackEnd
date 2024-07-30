@@ -12,13 +12,13 @@ public class MuscleGroupResponse {
 
     private String muscleGroupDescription;
 
-    //private List<MuscleGroupWorkoutResponse> workouts;
+    private List<MuscleGroupWorkoutResponse> workouts;
 
     public MuscleGroupResponse(MuscleGroup muscleGroup) {
         this.id = muscleGroup.getId();
         this.muscleGroupName = muscleGroup.getMuscleGroupName();
         this.muscleGroupDescription = muscleGroup.getMuscleGroupDescription();
-        //this.workouts = muscleGroup.getMuscleGroupWorkouts().stream().map(MuscleGroupWorkoutResponse::new).collect(Collectors.toList());
+        this.workouts = muscleGroup.getMuscleGroupWorkouts().stream().map(MuscleGroupWorkoutResponse::new).collect(Collectors.toList());
     }
 
     public String getId() {
@@ -33,7 +33,7 @@ public class MuscleGroupResponse {
         return muscleGroupDescription;
     }
 
-    /*public List<MuscleGroupWorkoutResponse> getWorkouts() {
+    public List<MuscleGroupWorkoutResponse> getWorkouts() {
         return workouts;
-    }*/
+    }
 }

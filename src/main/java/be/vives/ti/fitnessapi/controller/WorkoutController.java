@@ -53,8 +53,8 @@ public class WorkoutController {
         return workoutService.updateWorkout(id, updatedWorkout);
     }
 
-   /* @PutMapping("musclegroup")
+    @PutMapping("musclegroup")
     public ResponseEntity<String> removeMuscleGroup(@RequestParam("workoutid") String workoutId, @RequestParam("musclegroupid") String muscleGroupId) {
         return workoutService.removeMuscleGroup(workoutId, muscleGroupId);
-    }*/
+    }
 }
