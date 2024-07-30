@@ -13,13 +13,18 @@ public class WorkoutResponse {
 
     private double burnedKiloCaloriesPHour;
 
-    private List<WorkoutMuscleGroupResponse> muscleGroups;
+    private List<String> muscleGroups;
 
     public WorkoutResponse(Workout workout) {
         this.id = workout.getId();
         this.workoutName = workout.getWorkoutName();
         this.burnedKiloCaloriesPHour = workout.getBurnedKiloCaloriesPHour();
-        this.muscleGroups = workout.getWorkoutMuscleGroups().stream().map(WorkoutMuscleGroupResponse::new).collect(Collectors.toList());
+        this.muscleGroups = workout.getWorkoutMuscleGroups();
+        /*for (String muscleGroupId : workout.getWorkoutMuscleGroups()) {
+
+            this.muscleGroups.add(muscleGroup.getId());
+        }*/
+        //this.muscleGroups = workout.getWorkoutMuscleGroups().stream().collect(Collectors.toList());
     }
 
     public String getId() {
@@ -34,7 +39,7 @@ public class WorkoutResponse {
         return burnedKiloCaloriesPHour;
     }
 
-   public List<WorkoutMuscleGroupResponse> getWorkoutMuscleGroups() {
+  public List<String> getWorkoutMuscleGroups() {
         return muscleGroups;
     }
 

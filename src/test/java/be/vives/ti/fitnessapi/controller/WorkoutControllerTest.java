@@ -74,14 +74,14 @@ class WorkoutControllerTest {
         workoutMuscleGroups.add(triceps);
         workoutMuscleGroups.add(pecs);
 
-        benchPress.addMuscleGroup(triceps);
-        benchPress.addMuscleGroup(pecs);
+        benchPress.addMuscleGroup(triceps.getId());
+        benchPress.addMuscleGroup(pecs.getId());
 
-        preacherCurls.addMuscleGroup(biceps);
+        preacherCurls.addMuscleGroup(biceps.getId());
 
-        barbellPress.addMuscleGroup(triceps);
+        barbellPress.addMuscleGroup(triceps.getId());
 
-        cableChestPress.addMuscleGroup(pecs);
+        cableChestPress.addMuscleGroup(pecs.getId());
 
         when(workoutService.findAll()).thenReturn(workouts.stream().map(WorkoutResponse::new).collect(Collectors.toList()));
     }

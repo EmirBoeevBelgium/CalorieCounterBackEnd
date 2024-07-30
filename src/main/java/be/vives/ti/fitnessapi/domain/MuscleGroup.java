@@ -28,6 +28,7 @@ public class MuscleGroup {
     @Field("muscleGroupDescription")
     private String muscleGroupDescription;
 
+
     private List<Workout> musclegroupWorkouts = new ArrayList<>();
 
     public MuscleGroup(String muscleGroupName, String muscleGroupDescription) {

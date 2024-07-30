@@ -28,8 +28,7 @@ public class Workout {
     @Field("burnedKiloCaloriesPHour")
     private double burnedKiloCaloriesPHour;
 
-    @DBRef
-    private List<MuscleGroup> workoutMuscleGroups = new ArrayList<>();
+    private List<String> workoutMuscleGroupIds = new ArrayList<>();
 
     public Workout(String workoutName, double burnedKiloCaloriesPHour) {
         this.workoutName = workoutName;
@@ -51,19 +50,19 @@ public class Workout {
         return burnedKiloCaloriesPHour;
     }
 
-    public List<MuscleGroup> getWorkoutMuscleGroups() {
-        return workoutMuscleGroups;
+    public List<String> getWorkoutMuscleGroups() {
+        return workoutMuscleGroupIds;
     }
 
-    public MuscleGroup removeMuscleGroupById(String id) {
-        MuscleGroup foundMuscleGroup = new MuscleGroup();
+    public String removeMuscleGroupById(String id) {
+        String foundMuscleGroup = new String();
         int i = 0;
         boolean muscleGroupFound = false;
-        while (i < workoutMuscleGroups.size() && !muscleGroupFound) {
-            if (Objects.equals(workoutMuscleGroups.get(i).getId(), id)) {
-                foundMuscleGroup = workoutMuscleGroups.get(i);
-                workoutMuscleGroups.remove(i);
-                foundMuscleGroup.getMuscleGroupWorkouts().remove(this);
+        while (i < workoutMuscleGroupIds.size() && !muscleGroupFound) {
+            if (Objects.equals(workoutMuscleGroupIds.get(i), id)) {
+                foundMuscleGroup = workoutMuscleGroupIds.get(i);
+                workoutMuscleGroupIds.remove(i);
+                //foundMuscleGroup.getMuscleGroupWorkouts().remove(this);
                 muscleGroupFound = true;
             }
             i++;
@@ -83,12 +82,12 @@ public class Workout {
         this.burnedKiloCaloriesPHour = burnedKiloCaloriesPHour;
     }
 
-    public void setMuscleGroups(List<MuscleGroup> muscleGroups) {
-        this.workoutMuscleGroups = muscleGroups;
+    public void setMuscleGroups(List<String> muscleGroups) {
+        this.workoutMuscleGroupIds = muscleGroups;
     }
 
-    public void addMuscleGroup(MuscleGroup muscleGroup) {
-        this.workoutMuscleGroups.add(muscleGroup);
+    public void addMuscleGroup(String muscleGroupId) {
+        this.workoutMuscleGroupIds.add(muscleGroupId);
     }
 
     @Override
