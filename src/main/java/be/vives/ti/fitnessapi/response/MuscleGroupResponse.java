@@ -33,7 +33,7 @@ public class MuscleGroupResponse {
         return muscleGroupDescription;
     }
 
-    public List<MuscleGroupWorkoutResponse> getWorkouts() {
+    public List<MuscleGroupWorkoutResponse> getWorkouts() { //ff
         return workouts;
     }
 }
