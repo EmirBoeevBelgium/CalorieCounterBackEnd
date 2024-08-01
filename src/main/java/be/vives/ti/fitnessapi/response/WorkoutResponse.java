@@ -34,7 +34,7 @@ public class WorkoutResponse {
         return burnedKiloCaloriesPHour;
     }
 
-   public List<String> getWorkoutMuscleGroups() {
+   public List<String> getWorkoutMuscleGroupIds() {
         return muscleGroupIds;
     }
 
