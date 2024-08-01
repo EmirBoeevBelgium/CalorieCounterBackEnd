@@ -24,6 +24,12 @@ public class MuscleGroupController {
         return muscleGroupService.findAll();
     }
 
+
+    @GetMapping("id")
+    public ResponseEntity<MuscleGroupResponse> findById(@RequestParam("id") String id) {
+        return muscleGroupService.findById(id);
+    }
+
     @GetMapping("musclegroup")
     public ResponseEntity<MuscleGroupResponse> findByExactMuscleGroupName(@RequestParam("name") String muscleGroupName) {
         return muscleGroupService.findByExactMuscleGroupName(muscleGroupName);

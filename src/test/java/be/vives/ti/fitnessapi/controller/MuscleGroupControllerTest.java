@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -46,9 +47,15 @@ class MuscleGroupControllerTest {
     @BeforeEach
     void setUp() {
         muscleGroups = new ArrayList<>();
-        muscleGroups.add(new MuscleGroup("Biceps", "Double muscle in your arms."));
-        muscleGroups.add(new MuscleGroup("Triceps", "Triple muscle in your arms."));
-        muscleGroups.add(new MuscleGroup("Pectorals", "Chest muscles."));
+        MuscleGroup biceps = new MuscleGroup("Biceps", "Double muscle in your arms.");
+        biceps.setId("1");
+        muscleGroups.add(biceps);
+        MuscleGroup triceps = new MuscleGroup("Triceps", "Triple muscle in your arms.");
+        triceps.setId("2");
+        muscleGroups.add(triceps);
+        MuscleGroup pecs = new MuscleGroup("Pectorals", "Chest muscles.");
+        pecs.setId("3");
+        muscleGroups.add(pecs);
 
 
 
@@ -59,9 +66,9 @@ class MuscleGroupControllerTest {
         muscleGroupWorkouts.add(new Workout("Cable chest press", 120));
         muscleGroupWorkouts.add(new Workout("Downward cable press", 244));
 
-        MuscleGroup biceps = muscleGroups.get(0);
-        MuscleGroup triceps = muscleGroups.get(1);
-        MuscleGroup pecs = muscleGroups.get(2);
+        biceps = muscleGroups.get(0);
+        triceps = muscleGroups.get(1);
+        pecs = muscleGroups.get(2);
 
         Workout benchPress = muscleGroupWorkouts.get(0);
         Workout preacherCurls = muscleGroupWorkouts.get(1);
@@ -88,6 +95,30 @@ class MuscleGroupControllerTest {
                 .andExpect(jsonPath("$[0].muscleGroupName", equalTo("Biceps")))
                 .andExpect(jsonPath("$[1].muscleGroupName", equalTo("Triceps")))
                 .andExpect(jsonPath("$[2].muscleGroupName", equalTo("Pectorals")));
+    }
+
+    @Test
+    void findById() throws Exception {
+        MuscleGroupResponse biceps = new MuscleGroupResponse(muscleGroups.get(0));
+
+        String id = biceps.getId();
+        when(muscleGroupService.findById(biceps.getId())).thenReturn(ResponseEntity.ok(biceps));
+        mockMvc.perform(get(apiUrl + "/id").param("id", biceps.getId()))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.muscleGroupName", equalTo("Biceps")));
+    }
+
+    @Test
+    void findByIdNotFound() throws Exception {
+        MuscleGroupResponse biceps = new MuscleGroupResponse(muscleGroups.get(0));
+
+        String id = biceps.getId();
+        when(muscleGroupService.findById("44")).thenReturn(ResponseEntity.notFound().build());
+        mockMvc.perform(get(apiUrl + "/id").param("id", "44"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     @Test

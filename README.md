@@ -2,6 +2,8 @@ Swagger URL (dev): http://localhost:8081/swagger-ui/index.html#/
 
 Swagger URL (prod): http://localhost:8080/swagger-ui/index.html#/
 
+Online versie: https://fitness-api-boeev-emir-399322ec1a53.herokuapp.com/swagger-ui/index.html#/
+
 
 
 Domeinmodellen:

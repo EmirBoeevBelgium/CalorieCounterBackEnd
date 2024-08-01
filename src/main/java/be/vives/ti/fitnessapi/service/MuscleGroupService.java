@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,6 +25,16 @@ public class MuscleGroupService {
     public List<MuscleGroupResponse> findAll() {
         List<MuscleGroup> muscleGroups = muscleGroupRepository.findAll();
         return muscleGroups.stream().map(MuscleGroupResponse::new).collect(Collectors.toList());
+    }
+
+
+    public ResponseEntity<MuscleGroupResponse> findById(String id) {
+        Optional<MuscleGroup> muscleGroupOptional = muscleGroupRepository.findById(id);
+        if(muscleGroupOptional.isPresent()) {
+            MuscleGroupResponse response = new MuscleGroupResponse(muscleGroupOptional.get());
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     public ResponseEntity<MuscleGroupResponse> findByExactMuscleGroupName(String muscleGroupName) {
