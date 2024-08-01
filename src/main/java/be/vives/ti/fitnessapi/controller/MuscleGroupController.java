@@ -25,7 +25,7 @@ public class MuscleGroupController {
     }
 
 
-    @GetMapping("musclegroup")
+    @GetMapping("id")
     public ResponseEntity<MuscleGroupResponse> findById(@RequestParam("id") String id) {
         return muscleGroupService.findById(id);
     }
