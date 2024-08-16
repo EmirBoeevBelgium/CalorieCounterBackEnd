@@ -9,5 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface MuscleGroupRepository extends MongoRepository<MuscleGroup, String> {
-    Optional<MuscleGroup> findByMuscleGroupNameIgnoreCase(String muscleGroupName); //f
+    //Find exact muscle group by name, ignoring the case
+    Optional<MuscleGroup> findByMuscleGroupNameIgnoreCase(String muscleGroupName);
 }

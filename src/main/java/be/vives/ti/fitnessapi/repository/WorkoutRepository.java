@@ -10,12 +10,13 @@ import java.util.Optional;
 
 @Repository
 public interface WorkoutRepository extends MongoRepository<Workout, String> {
-
+    //Find exact workout by name, ignoring the case
     Optional<Workout> findByWorkoutNameIgnoreCase(String workoutName);
+    //Find recipes between a specified set of burned kiloCalories/Hour
     List<Workout> findByBurnedKiloCaloriesPHourBetween(double startBurnedCaloriesPHour, double endBurnedCaloriesPHour);
-
+    //Check if workout exists by name
     boolean existsByWorkoutName(String workoutname);
-
+    //Delete workout by ID
     void deleteWorkoutById(String id);
 
 }

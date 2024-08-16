@@ -1,9 +1,9 @@
 package be.vives.ti.fitnessapi.request;
 
-//import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+//Request type of the ingredient model
 public class RecipeIngredientRequest {
     @NotNull
     @NotEmpty
@@ -11,7 +11,6 @@ public class RecipeIngredientRequest {
 
     @NotNull
     @NotEmpty
-    //@Column(length = 10)
     private String ingredientAmount;
 
     public String getIngredientName() {

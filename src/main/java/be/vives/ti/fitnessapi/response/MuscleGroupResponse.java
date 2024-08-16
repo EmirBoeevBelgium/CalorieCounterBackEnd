@@ -5,6 +5,7 @@ import be.vives.ti.fitnessapi.domain.MuscleGroup;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//Response type of the muscle group model. The user can only see the data from this model.
 public class MuscleGroupResponse {
     private String id;
 

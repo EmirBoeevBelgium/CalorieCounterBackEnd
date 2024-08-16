@@ -4,11 +4,9 @@ import be.vives.ti.fitnessapi.domain.MuscleGroup;
 import be.vives.ti.fitnessapi.domain.Workout;
 import be.vives.ti.fitnessapi.repository.MuscleGroupRepository;
 import be.vives.ti.fitnessapi.response.MuscleGroupResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

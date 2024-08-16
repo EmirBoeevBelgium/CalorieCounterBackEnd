@@ -1,9 +1,8 @@
 package be.vives.ti.fitnessapi.response;
 
 import be.vives.ti.fitnessapi.domain.RecipeIngredient;
-//import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotNull;
 
+//This model is used in the RecipeResponse model.
 public class RecipeIngredientResponse {
 
     private String ingredientName;

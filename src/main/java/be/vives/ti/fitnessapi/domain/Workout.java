@@ -1,10 +1,8 @@
 package be.vives.ti.fitnessapi.domain;
 
-//import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
+
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -12,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/*@Entity
-@Table(name = "WORKOUT")*/
 @Document("workouts")
 public class Workout {
 
@@ -28,6 +24,9 @@ public class Workout {
     @Field("burnedKiloCaloriesPHour")
     private double burnedKiloCaloriesPHour;
 
+    //Each workout can target one or multiple muscle groups. Here I save the ID's instead of the muscle groups or
+    //else loading them would take too long (around 40 seconds or so). It might be because I am using a free tier of MongoDB
+    //which has less computing power.
     private List<String> workoutMuscleGroupIds = new ArrayList<>();
 
     public Workout(String workoutName, double burnedKiloCaloriesPHour) {
@@ -58,11 +57,15 @@ public class Workout {
         String foundMuscleGroupId = new String();
         int i = 0;
         boolean muscleGroupFound = false;
+
         while (i < workoutMuscleGroupIds.size() && !muscleGroupFound) {
+            //Check if the muscle group exists
             if (Objects.equals(workoutMuscleGroupIds.get(i), id)) {
+                //Save the muscle group
                 foundMuscleGroupId = workoutMuscleGroupIds.get(i);
+                //Remove the muscle group
                 workoutMuscleGroupIds.remove(i);
-                //foundMuscleGroupId.getMuscleGroupWorkouts().remove(this);
+                //Set the variable muscleGroupFound to true, to stop the loop
                 muscleGroupFound = true;
             }
             i++;
@@ -98,91 +101,4 @@ public class Workout {
                 ", burnedCaloriesPHour=" + burnedKiloCaloriesPHour +
                 '}';
     }
-
-    /*@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @NotNull
-    private String workoutName;
-
-    @NotNull
-    private double burnedKiloCaloriesPHour;
-
-
-    @ManyToMany(mappedBy = "musclegroupWorkouts")
-    private List<MuscleGroup> workoutMuscleGroups = new ArrayList<>();
-
-    public Workout(String workoutName, double burnedKiloCaloriesPHour) {
-        this.workoutName = workoutName;
-        this.burnedKiloCaloriesPHour = burnedKiloCaloriesPHour;
-    }
-
-    protected Workout() {
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getWorkoutName() {
-        return workoutName;
-    }
-
-    public double getBurnedKiloCaloriesPHour() {
-        return burnedKiloCaloriesPHour;
-    }
-
-
-    public List<MuscleGroup> getWorkoutMuscleGroups() {
-        return workoutMuscleGroups;
-    }
-
-
-    public MuscleGroup removeMuscleGroupById(Long id) {
-        MuscleGroup foundMuscleGroup = new MuscleGroup();
-        int i = 0;
-        boolean musclegGroupFound = false;
-        while (i < workoutMuscleGroups.size() && !musclegGroupFound) {
-            if(Objects.equals(workoutMuscleGroups.get(i).getId(), id)) {
-                foundMuscleGroup = workoutMuscleGroups.get(i);
-                workoutMuscleGroups.remove(i);
-                foundMuscleGroup.getMuscleGroupWorkouts().remove(this);
-                musclegGroupFound = true;
-
-            }
-            i++;
-        }
-        return foundMuscleGroup;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setWorkoutName(String workoutName) {
-        this.workoutName = workoutName;
-    }
-
-    public void setBurnedKiloCaloriesPHour(double burnedKiloCaloriesPHour) {
-        this.burnedKiloCaloriesPHour = burnedKiloCaloriesPHour;
-    }
-
-    public void setMuscleGroups(List<MuscleGroup> muscleGroups) {
-        this.workoutMuscleGroups = muscleGroups;
-    }
-
-    public void addMuscleGroup(MuscleGroup muscleGroup) {
-        this.workoutMuscleGroups.add(muscleGroup);
-    }
-
-    @Override
-    public String toString() {
-        return "Workout{" +
-                "id=" + id +
-                ", workoutName='" + workoutName + '\'' +
-                ", burnedCaloriesPHour=" + burnedKiloCaloriesPHour +
-                '}';
-    }*/
 }

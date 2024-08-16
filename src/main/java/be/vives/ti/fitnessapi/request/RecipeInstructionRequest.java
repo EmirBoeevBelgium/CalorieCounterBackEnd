@@ -1,10 +1,10 @@
 package be.vives.ti.fitnessapi.request;
 
-//import jakarta.persistence.Column;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+//Request type of the instruction model
 public class RecipeInstructionRequest {
     @NotNull
     @NotEmpty

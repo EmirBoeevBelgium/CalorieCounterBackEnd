@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+//Request type of the workout model. Used to save workout(s).
 public class WorkoutRequest {
     @NotNull
     @NotEmpty

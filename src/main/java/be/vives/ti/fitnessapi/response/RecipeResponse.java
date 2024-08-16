@@ -5,6 +5,7 @@ import be.vives.ti.fitnessapi.domain.Recipe;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//Response type of the Recipe model.
 public class RecipeResponse {
     private String id;
 
