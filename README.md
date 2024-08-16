@@ -23,6 +23,8 @@ Houdt de naam, aantal kilocalorieën, instructies en ingrediënten van het recep
 Een recept kan meerdere instructies en ingrediënten bevatten en
 worden in een lijst bijgehouden om kolommen met grote stukken tekst te vermijden.
 De kilocalorieën kunnen nooit een negatieve waarde hebben, indien men dit probeert, wordt deze automatisch op 0 gezet.
+RecipeIngredient en RecipeInstruction worden zelf niet opgeslagen in de database, maar worden meegegeven samen met het 
+recept.
 
 **RecipeIngredient**
 
