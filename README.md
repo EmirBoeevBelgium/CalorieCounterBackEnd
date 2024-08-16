@@ -14,7 +14,8 @@ De id's van alle domeinmodellen worden automatisch gegenereerd.
 
 Houdt de naam en beschrijving van de spiergroep bij.
 Het houdt ook de verschillende soorten oefeningen bij die op de respectievelijke spiergroep
-gericht is. 
+gericht is.
+Een spiergroep kan meerdere oefeningen bevatten en een oefening kan op meerdere spiergroepen gericht zijn.
 
 **Recipe**
 
@@ -40,10 +41,6 @@ Houdt de naam, aantal verbrande kilocalorieën en de spiergroepen bij die deze o
 Het houdt de spiergroepen bij waarop de oefening gericht is.
 Een spiergroep kan meerdere oefeningen bevatten en een oefening kan op meerdere spiergroepen gericht zijn.
 
-
-
-
-
-
+![img.png](img.png)
 
 
